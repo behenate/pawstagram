@@ -1,0 +1,137 @@
+import * as React from 'react';
+import { Button, TextInput, Snackbar } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { auth, firestore } from '../firebase/config';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { collection, doc, setDoc } from 'firebase/firestore';
+import CommonContainer from '../containers/CommonContainer';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
+export default function RegisterScreen() {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmedPassword, setConfirmedPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorSnackbarVisible, setErrorSnackbarVisible] = useState(false);
+  const [errorSnackbarText, setErrorSnackbarText] = useState('');
+
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const register = async () => {
+    setIsLoading(true);
+    if (password != confirmedPassword) {
+      setErrorSnackbarText('Passwords do not match!');
+      setErrorSnackbarVisible(true);
+      setIsLoading(false);
+      return;
+    }
+
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then((response) => {
+        const uid = response.user?.uid;
+        const data = {
+          id: uid,
+          email,
+          fullName,
+        };
+        const usersRef = collection(firestore, 'users');
+        const usersDoc = doc(usersRef, 'users');
+        setDoc(usersDoc, data).catch((error) => {
+          alert(error);
+        });
+      })
+      .catch((error) => {
+        alert(error);
+      })
+      .then(() => {
+        console.log('Halo :((');
+        navigation.navigate('Success', {
+          message: 'Account Created Successfully!',
+          buttonText: 'To Login',
+          onButtonPress: () => navigation.navigate('Welcome'),
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  // @ts-ignore
+  return (
+    <CommonContainer>
+      <View style={styles.container}>
+        <TextInput
+          label="Full Name"
+          value={fullName}
+          style={styles.input}
+          mode={'outlined'}
+          onChangeText={(v) => setFullName(v)}
+        />
+        <TextInput
+          label="Email"
+          value={email}
+          style={styles.input}
+          mode={'outlined'}
+          onChangeText={(v) => setEmail(v)}
+        />
+
+        <TextInput
+          label="Password"
+          value={password}
+          style={styles.input}
+          mode={'outlined'}
+          onChangeText={(v) => setPassword(v)}
+        />
+
+        <TextInput
+          label="Confirm Password"
+          value={confirmedPassword}
+          style={styles.input}
+          mode={'outlined'}
+          onChangeText={(v) => setConfirmedPassword(v)}
+        />
+
+        <Button mode="contained-tonal" loading={isLoading} style={styles.button} onPress={register}>
+          Register
+        </Button>
+
+        <Snackbar
+          visible={errorSnackbarVisible}
+          onDismiss={() => {
+            setErrorSnackbarVisible(false);
+          }}
+          duration={1000}
+          action={{
+            label: 'Ok',
+            onPress: () => {
+              setErrorSnackbarVisible(false);
+            },
+          }}>
+          {errorSnackbarText}
+        </Snackbar>
+      </View>
+    </CommonContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    marginVertical: 30,
+    marginHorizontal: 50,
+  },
+  button: {
+    marginVertical: 10,
+    marginHorizontal: 50,
+  },
+  input: {
+    marginVertical: 10,
+  },
+});
