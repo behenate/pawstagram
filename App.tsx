@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
+import HomeScreen from './src/screens/HomeScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -20,6 +21,7 @@ export default function App() {
           <Stack.Screen name={'Login'} component={LoginScreen} />
           <Stack.Screen name={'Register'} component={RegisterScreen} />
           <Stack.Screen name={'Success'} component={SuccessScreen} />
+          <Stack.Screen name={'Home'} component={HomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
@@ -31,6 +33,7 @@ export type RootStackParamList = {
   Login: undefined;
   Success: SuccessScreenParams;
   Register: undefined;
+  Home: any;
 };
 
 const theme = {

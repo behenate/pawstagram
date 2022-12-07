@@ -5,23 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 
-export default function WelcomeScreen() {
+export default function HomeScreen(props: any) {
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   return (
     <CommonContainer style={styles.container}>
-      <Text style={[theme.fonts.titleLarge, styles.title]}>Welcome to {'\n'}Pawstagram!</Text>
-      <Button
-        mode={'contained'}
-        style={styles.register}
-        onPress={() => navigation.navigate('Register')}>
-        Join Pawstagram
-      </Button>
-      <Text style={[theme.fonts.bodyMedium, styles.prompt]}>Already an user?</Text>
-      <Button mode={'elevated'} onPress={() => navigation.navigate('Login')}>
-        Login
-      </Button>
+      <Text>{props.user}</Text>
     </CommonContainer>
   );
 }
