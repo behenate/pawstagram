@@ -6,9 +6,9 @@ import SuccessScreen, { SuccessScreenParams } from './src/screens/SuccessScreen'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from './src/screens/LoginScreen';
 import WelcomeScreen from './src/screens/WelcomeScreen';
-import HomeScreen from './src/screens/HomeScreen';
+import HomeScreen, { HomeScreenParams } from './src/screens/HomeScreen';
+import LoginScreen from './src/screens/LoginScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -33,7 +33,7 @@ export type RootStackParamList = {
   Login: undefined;
   Success: SuccessScreenParams;
   Register: undefined;
-  Home: any;
+  Home: HomeScreenParams;
 };
 
 const theme = {

@@ -1,15 +1,18 @@
 import * as React from 'react';
-import { Button, useTheme, TextInput } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
 import { useState } from 'react';
+import { Button, TextInput, useTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
 import { auth, firestore } from '../firebase/config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, doc, getDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
+import { User } from '../types/User';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App';
 
 export default function LoginScreen() {
   const theme = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -24,8 +27,10 @@ export default function LoginScreen() {
           alert("User doesn't exist!");
           return;
         }
-        const userData = document.data();
-        navigation.navigate('Home', { user: userData });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home', params: { userData: document.data() as User } }],
+        });
       });
     });
   };

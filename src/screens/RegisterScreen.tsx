@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 import { LogBox } from 'react-native';
+import { User } from '../types/User';
 
 LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
 export default function RegisterScreen() {
@@ -35,13 +36,13 @@ export default function RegisterScreen() {
     await createUserWithEmailAndPassword(auth, email, password)
       .then((response) => {
         const uid = response.user?.uid;
-        const data = {
+        const data: User = {
           id: uid,
           email,
           fullName,
         };
         const usersRef = collection(firestore, 'users');
-        const usersDoc = doc(usersRef, 'users');
+        const usersDoc = doc(usersRef, uid);
         setDoc(usersDoc, data).catch((error) => {
           alert(error);
         });

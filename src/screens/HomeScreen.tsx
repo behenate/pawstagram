@@ -4,14 +4,20 @@ import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
+import { User } from '../types/User';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export default function HomeScreen(props: any) {
+export default function HomeScreen({
+  route: {
+    params: { userData },
+  },
+}: HomeScreenProps) {
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
+  console.log(userData);
   return (
     <CommonContainer style={styles.container}>
-      <Text>{props.user}</Text>
+      <Text>Welcome! {userData.fullName}</Text>
     </CommonContainer>
   );
 }
@@ -33,3 +39,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+export type HomeScreenParams = {
+  userData: User;
+};
+type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
