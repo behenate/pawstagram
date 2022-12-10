@@ -14,6 +14,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
+    // @ts-ignore
     <PaperProvider theme={theme}>
       <NavigationContainer>
         <Stack.Navigator>
@@ -42,4 +43,5 @@ const theme = {
   myOwnProperty: true,
   // Specify custom property in nested object
   roundness: 10,
+  version: 3,
 };

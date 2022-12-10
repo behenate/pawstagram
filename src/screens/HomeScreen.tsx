@@ -1,8 +1,6 @@
 import CommonContainer from '../containers/CommonContainer';
-import { Button, useTheme, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 import { User } from '../types/User';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -12,9 +10,6 @@ export default function HomeScreen({
     params: { userData },
   },
 }: HomeScreenProps) {
-  const theme = useTheme();
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  console.log(userData);
   return (
     <CommonContainer style={styles.container}>
       <Text>Welcome! {userData.fullName}</Text>

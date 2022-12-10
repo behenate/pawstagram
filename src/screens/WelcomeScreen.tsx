@@ -4,12 +4,39 @@ import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
+import { collection, doc, getDoc } from 'firebase/firestore';
+import { auth, firestore } from '../firebase/config';
+import { User } from '../types/User';
+import { useEffect, useState } from 'react';
+import LoadingScreen from './LoadingScreen';
 
 export default function WelcomeScreen() {
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [isLoading, setIsLoading] = useState(true);
+  const persistLogin = () => {
+    const usersCollection = collection(firestore, 'users');
+    auth.onAuthStateChanged((user) => {
+      setIsLoading(true);
+      if (user?.uid) {
+        getDoc(doc(usersCollection, user.uid))
+          .then((document) => {
+            if (document.exists() && document.data()) {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Home', params: { userData: document.data() as User } }],
+              });
+            }
+          })
+          .finally(() => setIsLoading(false));
+      }
+    });
+  };
 
-  return (
+  useEffect(persistLogin, []);
+  return isLoading ? (
+    <LoadingScreen />
+  ) : (
     <CommonContainer style={styles.container}>
       <Text style={[theme.fonts.titleLarge, styles.title]}>Welcome to {'\n'}Pawstagram!</Text>
       <Button
@@ -39,7 +66,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   prompt: {
-    textAlign: 'center',
     marginBottom: 10,
+    textAlign: 'center',
   },
 });
