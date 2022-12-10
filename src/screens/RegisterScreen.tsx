@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, TextInput, Snackbar } from 'react-native-paper';
+import { Button, TextInput, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { auth, firestore } from '../firebase/config';
@@ -19,16 +19,13 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [confirmedPassword, setConfirmedPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [errorSnackbarVisible, setErrorSnackbarVisible] = useState(false);
-  const [errorSnackbarText, setErrorSnackbarText] = useState('');
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
+  const theme = useTheme();
   const register = async () => {
     setIsLoading(true);
     if (password != confirmedPassword) {
-      setErrorSnackbarText('Passwords do not match!');
-      setErrorSnackbarVisible(true);
+      alert('Passwords do not match!');
       setIsLoading(false);
       return;
     }
@@ -71,6 +68,7 @@ export default function RegisterScreen() {
           label="Full Name"
           value={fullName}
           style={styles.input}
+          outlineColor={theme.colors.primary}
           mode={'outlined'}
           onChangeText={(v) => setFullName(v)}
         />
@@ -78,6 +76,7 @@ export default function RegisterScreen() {
           label="Email"
           value={email}
           style={styles.input}
+          outlineColor={theme.colors.primary}
           mode={'outlined'}
           onChangeText={(v) => setEmail(v)}
         />
@@ -86,6 +85,8 @@ export default function RegisterScreen() {
           label="Password"
           value={password}
           style={styles.input}
+          outlineColor={theme.colors.primary}
+          secureTextEntry={true}
           mode={'outlined'}
           onChangeText={(v) => setPassword(v)}
         />
@@ -94,6 +95,8 @@ export default function RegisterScreen() {
           label="Confirm Password"
           value={confirmedPassword}
           style={styles.input}
+          outlineColor={theme.colors.primary}
+          secureTextEntry={true}
           mode={'outlined'}
           onChangeText={(v) => setConfirmedPassword(v)}
         />
@@ -101,21 +104,6 @@ export default function RegisterScreen() {
         <Button mode="contained-tonal" loading={isLoading} style={styles.button} onPress={register}>
           Register
         </Button>
-
-        <Snackbar
-          visible={errorSnackbarVisible}
-          onDismiss={() => {
-            setErrorSnackbarVisible(false);
-          }}
-          duration={1000}
-          action={{
-            label: 'Ok',
-            onPress: () => {
-              setErrorSnackbarVisible(false);
-            },
-          }}>
-          {errorSnackbarText}
-        </Snackbar>
       </View>
     </CommonContainer>
   );

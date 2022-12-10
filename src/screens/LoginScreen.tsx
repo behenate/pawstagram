@@ -18,21 +18,28 @@ export default function LoginScreen() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [userData, setUserData] = useState();
   const login = () => {
-    signInWithEmailAndPassword(auth, email, password).then((r) => {
-      const usersRef = collection(firestore, 'users');
-      const usersDoc = getDoc(doc(usersRef, r.user.uid)).then((document) => {
-        if (!document.exists()) {
-          alert("User doesn't exist!");
-          return;
-        }
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Home', params: { userData: document.data() as User } }],
+    setIsLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then((r) => {
+        const usersRef = collection(firestore, 'users');
+        getDoc(doc(usersRef, r.user.uid)).then((document) => {
+          if (!document.exists()) {
+            alert("User doesn't exist!");
+            return;
+          }
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home', params: { userData: document.data() as User } }],
+          });
         });
+      })
+      .catch((e) => {
+        alert(e.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-    });
   };
 
   return (
@@ -47,16 +54,13 @@ export default function LoginScreen() {
 
         <TextInput
           label="Password"
+          secureTextEntry={true}
           value={password}
           style={styles.input}
           onChangeText={(v) => setPassword(v)}
         />
 
-        <Button
-          mode="contained-tonal"
-          loading={isLoading}
-          style={styles.button}
-          onPress={() => login()}>
+        <Button mode="contained-tonal" loading={isLoading} style={styles.button} onPress={login}>
           Login
         </Button>
       </View>
