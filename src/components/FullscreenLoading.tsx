@@ -3,7 +3,7 @@ import CommonContainer from '../containers/CommonContainer';
 import { ActivityIndicator } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 
-export default function LoadingScreen() {
+export default function FullscreenLoading() {
   return (
     <CommonContainer style={styles.container}>
       <ActivityIndicator size={'large'}></ActivityIndicator>

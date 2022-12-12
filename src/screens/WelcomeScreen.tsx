@@ -8,7 +8,7 @@ import { collection, doc, getDoc } from 'firebase/firestore';
 import { auth, firestore } from '../firebase/config';
 import { User } from '../types/User';
 import { useEffect, useState } from 'react';
-import LoadingScreen from './LoadingScreen';
+import FullscreenLoading from '../components/FullscreenLoading';
 
 export default function WelcomeScreen() {
   const theme = useTheme();
@@ -35,7 +35,7 @@ export default function WelcomeScreen() {
 
   useEffect(persistLogin, []);
   return isLoading ? (
-    <LoadingScreen />
+    <FullscreenLoading />
   ) : (
     <CommonContainer style={styles.container}>
       <Text style={[theme.fonts.titleLarge, styles.title]}>Welcome to {'\n'}Pawstagram!</Text>
