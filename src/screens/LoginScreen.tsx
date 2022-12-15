@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Button, TextInput, useTheme } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { auth, firestore } from '../firebase/config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, doc, getDoc } from 'firebase/firestore';
@@ -9,16 +9,17 @@ import { useNavigation } from '@react-navigation/native';
 import { User } from '../types/User';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
+import CommonContainer from '../containers/CommonContainer';
 
 export default function LoginScreen() {
-  const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('dino@gmail.com');
+  const [password, setPassword] = useState('123456');
 
   const [isLoading, setIsLoading] = useState(false);
 
   const login = () => {
+    Keyboard.dismiss();
     setIsLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((r) => {
@@ -43,7 +44,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <CommonContainer>
       <View style={styles.container}>
         <TextInput
           label="Email"
@@ -64,7 +65,7 @@ export default function LoginScreen() {
           Login
         </Button>
       </View>
-    </View>
+    </CommonContainer>
   );
 }
 

@@ -18,10 +18,10 @@ export default function WelcomeScreen() {
     const usersCollection = collection(firestore, 'users');
     auth.onAuthStateChanged((user) => {
       setIsLoading(true);
-      if (user?.uid) {
+      if (user) {
         getDoc(doc(usersCollection, user.uid))
           .then((document) => {
-            if (document.exists() && document.data()) {
+            if (document.exists()) {
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'Home', params: { userData: document.data() as User } }],
@@ -29,6 +29,8 @@ export default function WelcomeScreen() {
             }
           })
           .finally(() => setIsLoading(false));
+      } else {
+        setIsLoading(false);
       }
     });
   };

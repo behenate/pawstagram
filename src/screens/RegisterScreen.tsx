@@ -48,7 +48,6 @@ export default function RegisterScreen() {
         alert(error);
       })
       .then(() => {
-        console.log('Halo :((');
         navigation.navigate('Success', {
           message: 'Account Created Successfully!',
           buttonText: 'To Login',
