@@ -1,15 +1,30 @@
 import CommonContainer from '../containers/CommonContainer';
-import { Text } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { RootStackParamList } from '../../App';
 import { User } from '../types/User';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useEffect } from 'react';
 
 export default function HomeScreen({
   route: {
     params: { userData },
   },
 }: HomeScreenProps) {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        // Adding offset, because the default padding is too much, and can't be removed
+        <Button icon={'menu'} contentStyle={{ left: 20 }}>
+          {''}
+        </Button>
+      ),
+    });
+  }, []);
+
   return (
     <CommonContainer style={styles.container}>
       <Text>Welcome! {userData.fullName}</Text>
