@@ -5,9 +5,7 @@ export default function NavigationHeader(props: NavigationHeaderProps) {
   const theme = useTheme();
   return (
     <View style={styles.container}>
-      {props.leftComponent ? props.leftComponent : <View />}
-      <Text style={[theme.fonts.titleMedium, styles.title]}>{props.children}</Text>
-      {props.rightComponent ? props.rightComponent : <View />}
+      <Text style={[theme.fonts.titleMedium]}>{props.children}</Text>
     </View>
   );
 }
@@ -17,9 +15,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // React navigation adds margin on the left by default
     left: -15,
-    backgroundColor: 'red',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: {},
 });

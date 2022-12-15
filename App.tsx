@@ -1,10 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import {
-  Provider as PaperProvider,
-  MD3LightTheme as DefaultTheme,
-  useTheme,
-} from 'react-native-paper';
+import { Provider as PaperProvider, MD3LightTheme as DefaultTheme } from 'react-native-paper';
 import RegisterScreen from './src/screens/RegisterScreen';
 import SuccessScreen, { SuccessScreenParams } from './src/screens/SuccessScreen';
 
@@ -13,12 +9,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import HomeScreen, { HomeScreenParams } from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
-import NavigationHeader from './src/containers/NavigationHeader';
+import NavigationHeader from './src/components/NavigationHeader';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
-  const theme = useTheme();
   return (
     // @ts-ignore
     <PaperProvider theme={theme}>
@@ -26,11 +21,10 @@ export default function App() {
         <Stack.Navigator
           screenOptions={{
             headerStyle: {
-              backgroundColor: '#f4511e',
+              backgroundColor: theme.colors.primaryContainer,
             },
-            headerTintColor: '#fff',
             headerTitleStyle: {
-              fontWeight: 'bold',
+              ...theme.fonts.titleMedium,
             },
             headerTitle: (props) => <NavigationHeader {...props} />,
           }}>
