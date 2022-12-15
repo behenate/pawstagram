@@ -18,7 +18,13 @@ export default function HomeScreen({
     navigation.setOptions({
       headerRight: () => (
         // Adding offset, because the default padding is too much, and can't be removed
-        <Button icon={'menu'} contentStyle={{ left: 20 }}>
+        <Button
+          icon={'menu'}
+          contentStyle={{
+            flexDirection: 'row-reverse',
+            left: 10,
+          }}
+          onPress={() => navigation.navigate('Settings')}>
           {''}
         </Button>
       ),
