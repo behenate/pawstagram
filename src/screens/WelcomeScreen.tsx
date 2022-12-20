@@ -24,7 +24,7 @@ export default function WelcomeScreen() {
             if (document.exists()) {
               navigation.reset({
                 index: 0,
-                routes: [{ name: 'Home', params: { userData: document.data() as User } }],
+                routes: [{ name: 'HomeNavigation', params: { userData: document.data() as User } }],
               });
             }
           })

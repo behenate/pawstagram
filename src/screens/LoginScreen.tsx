@@ -31,7 +31,7 @@ export default function LoginScreen() {
           }
           navigation.reset({
             index: 0,
-            routes: [{ name: 'Home', params: { userData: document.data() as User } }],
+            routes: [{ name: 'HomeNavigation', params: { userData: document.data() as User } }],
           });
         });
       })
