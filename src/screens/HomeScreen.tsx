@@ -1,39 +1,20 @@
 import CommonContainer from '../containers/CommonContainer';
 import { Button, Text } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { RootStackParamList } from '../../App';
 import { User } from '../types/User';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useEffect } from 'react';
+import { RootStackParamListTabs } from '../navigation/HomeTabNavigation';
 
 export default function HomeScreen({
+  navigation: tabNavigation,
   route: {
     params: { userData },
   },
 }: HomeScreenProps) {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        // Adding offset, because the default padding is too much, and can't be removed
-        <Button
-          icon={'menu'}
-          contentStyle={{
-            flexDirection: 'row-reverse',
-            left: 10,
-          }}
-          onPress={() => navigation.navigate('Settings')}>
-          {''}
-        </Button>
-      ),
-    });
-  }, []);
-
   return (
     <CommonContainer style={styles.container}>
       <Text>Welcome! {userData.fullName}</Text>
+      <Button onPress={() => tabNavigation.navigate('Chat')}>To chat!</Button>
     </CommonContainer>
   );
 }
@@ -59,4 +40,4 @@ const styles = StyleSheet.create({
 export type HomeScreenParams = {
   userData: User;
 };
-type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
+export type HomeScreenProps = NativeStackScreenProps<RootStackParamListTabs, 'Home'>;

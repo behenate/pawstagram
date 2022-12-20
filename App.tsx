@@ -7,9 +7,10 @@ import SuccessScreen, { SuccessScreenParams } from './src/screens/SuccessScreen'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomeScreen from './src/screens/WelcomeScreen';
-import HomeScreen, { HomeScreenParams } from './src/screens/HomeScreen';
+import { HomeScreenParams } from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import HomeTabNavigation from './src/navigation/HomeTabNavigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -32,7 +33,7 @@ export default function App() {
           <Stack.Screen name={'Login'} component={LoginScreen} />
           <Stack.Screen name={'Register'} component={RegisterScreen} />
           <Stack.Screen name={'Success'} component={SuccessScreen} />
-          <Stack.Screen name={'Home'} component={HomeScreen} />
+          <Stack.Screen name={'HomeNavigation'} component={HomeTabNavigation} />
           <Stack.Screen name={'Settings'} component={SettingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
@@ -45,7 +46,7 @@ export type RootStackParamList = {
   Login: undefined;
   Success: SuccessScreenParams;
   Register: undefined;
-  Home: HomeScreenParams;
+  HomeNavigation: HomeScreenParams;
   Settings: undefined;
 };
 
