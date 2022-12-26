@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTheme, Surface, Text, MD3Theme } from 'react-native-paper';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import CommonContainer from '../containers/CommonContainer';
 import { RootStackParamList } from '../../App';
 import { AntDesign } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { auth } from '../firebase/config';
 import { signOut } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import Line from '../components/Line';
 
 export default function SettingsScreen() {
   const theme = useTheme();
@@ -35,7 +36,7 @@ export default function SettingsScreen() {
         {iconText && <Text style={styles.settingsElemIcon}>{iconText}</Text>}
         <Text style={theme.fonts.labelLarge}>{text}</Text>
       </TouchableOpacity>
-      {!hideDivider && <View style={styles.elemDividerLine} />}
+      {!hideDivider && <Line />}
     </>
   );
 
@@ -87,10 +88,6 @@ const useStyles = (theme: MD3Theme) =>
     },
     settingsElemIcon: {
       marginRight: 10,
-    },
-    elemDividerLine: {
-      borderBottomColor: theme.colors.onSurface,
-      borderBottomWidth: StyleSheet.hairlineWidth,
     },
   });
 

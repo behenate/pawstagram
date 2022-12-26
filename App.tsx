@@ -58,10 +58,10 @@ const theme = {
   roundness: 10,
   version: 3,
   colors: {
-    primary: 'rgb(52, 61, 255)',
+    primary: 'rgb(117,120,196)',
     onPrimary: 'rgb(255, 255, 255)',
-    primaryContainer: 'rgb(224, 224, 255)',
-    onPrimaryContainer: 'rgb(0, 0, 110)',
+    primaryContainer: 'rgb(230,230,248)',
+    onPrimaryContainer: 'rgb(119,119,124)',
     secondary: 'rgb(92, 93, 114)',
     onSecondary: 'rgb(255, 255, 255)',
     secondaryContainer: 'rgb(225, 224, 249)',

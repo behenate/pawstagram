@@ -61,7 +61,7 @@ export default function LoginScreen() {
           onChangeText={(v) => setPassword(v)}
         />
 
-        <Button mode="contained-tonal" loading={isLoading} style={styles.button} onPress={login}>
+        <Button mode="contained" loading={isLoading} style={styles.button} onPress={login}>
           Login
         </Button>
       </View>

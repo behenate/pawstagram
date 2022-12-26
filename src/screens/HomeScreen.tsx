@@ -1,26 +1,26 @@
 import CommonContainer from '../containers/CommonContainer';
-import { Button, Text } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { User } from '../types/User';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamListTabs } from '../navigation/HomeTabNavigation';
+import React from 'react';
+import HomeFeed from '../components/HomeFeed';
+import { PostData } from '../types/PostData';
 
-export default function HomeScreen({
-  navigation: tabNavigation,
-  route: {
-    params: { userData },
-  },
-}: HomeScreenProps) {
+export default function HomeScreen() {
+  const post = require('../assets/testPost.json') as PostData;
+  const posts = Array(100);
+  for (let i = 0; i < 100; i++) {
+    posts[i] = post;
+  }
   return (
-    <CommonContainer style={styles.container}>
-      <Text>Welcome! {userData.fullName}</Text>
-      <Button onPress={() => tabNavigation.navigate('Chat')}>To chat!</Button>
+    <CommonContainer style={styles.container} useTouchableOpacity={false}>
+      <HomeFeed posts={posts as [PostData]} />
     </CommonContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -40,4 +40,3 @@ const styles = StyleSheet.create({
 export type HomeScreenParams = {
   userData: User;
 };
-export type HomeScreenProps = NativeStackScreenProps<RootStackParamListTabs, 'Home'>;
