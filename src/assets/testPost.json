@@ -100,12 +100,8 @@
       "likes": 232,
       "likedByLoggedInUser": false,
       "text": "Look at his eras!"
-    },{
-      "creator": "spanishLaugh",
-      "likes": 232,
-      "likedByLoggedInUser": false,
-      "text": "JAJAJAJAJAJAJAJA"
-    },{
+    },
+    {
       "creator": "sdfsdfds",
       "likes": 33000,
       "likedByLoggedInUser": false,
@@ -138,6 +134,11 @@
           "text": "5"
         }
       ]
+    },{
+      "creator": "spanishLaugh",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "JAJAJAJAJAJAJAJA"
     }
   ]
 }

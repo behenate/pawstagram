@@ -7,7 +7,7 @@ import { PostData } from '../types/PostData';
 
 export default function HomeFeed({ posts }: HomeFeedProps) {
   return (
-    <View style={{ width: Dimensions.get('screen').width, flex: 1, alignContent: 'center' }}>
+    <View style={{ flex: 1 }}>
       <FlashList<PostData>
         data={posts}
         estimatedItemSize={300}

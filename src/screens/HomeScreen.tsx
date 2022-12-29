@@ -1,5 +1,5 @@
 import CommonContainer from '../containers/CommonContainer';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { User } from '../types/User';
 import React from 'react';
 import HomeFeed from '../components/HomeFeed';
@@ -21,8 +21,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   title: {
     textAlign: 'center',

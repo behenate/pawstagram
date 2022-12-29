@@ -5,17 +5,24 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import Post from './Post';
 import CommentsList from './CommentsList';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App';
 
 export default function PostCard({ post }: PostCardProps) {
   const theme = useTheme();
   const styles = useStyles(theme);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
   return (
     <View style={styles.container}>
       <Post post={post} />
-      <View style={styles.commentsPreviewContainer}>
+      <TouchableOpacity
+        style={styles.commentsPreviewContainer}
+        onPress={() => navigation.navigate('Post', { post })}>
         <Text style={theme.fonts.titleSmall}>Comments:</Text>
         <CommentsList comments={post.comments} isPreview={true} />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }

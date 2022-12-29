@@ -25,16 +25,20 @@ export default function Comment({ comment, isPreview }: CommentProps) {
         </TouchableOpacity>
       )}
       {repliesVisible && (
-        <FlashList
-          data={replies}
-          renderItem={({ item: reply }) => (
-            <Text>
-              {' '}
-              <Text style={theme.fonts.titleSmall}>{reply.creator}: </Text>
-              <Text>{reply.text}</Text>
-            </Text>
-          )}
-        />
+        // minHeight used to avoid the "FlashList's rendered size is not usable" warning, it does not affect the looks of the app
+        <View style={{ flex: 1, minHeight: 10 }}>
+          <FlashList
+            estimatedItemSize={18}
+            data={replies}
+            renderItem={({ item: reply }) => (
+              <Text>
+                {' '}
+                <Text style={theme.fonts.titleSmall}>{reply.creator}: </Text>
+                <Text>{reply.text}</Text>
+              </Text>
+            )}
+          />
+        </View>
       )}
     </View>
   );

@@ -1,15 +1,26 @@
 import type { CommentData } from '../types/CommentData';
-import { StyleSheet, View, ViewStyle } from 'react-native';
-import React from 'react';
+import { RegisteredStyle, StyleSheet, View, ViewStyle } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Comment from './Comment';
 import { FlashList } from '@shopify/flash-list';
 
-export default function CommentsList({ comments, isPreview }: CommentListProps) {
+export default function CommentsList({
+  comments,
+  isPreview = false,
+  style,
+  reverse = true,
+}: CommentListProps) {
+  const [commentsProcessed, setCommentsProcessed] = useState(comments.slice());
+  useEffect(() => {
+    if (reverse) {
+      commentsProcessed.reverse();
+    }
+  }, []);
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, style]}>
       <FlashList<CommentData>
         estimatedItemSize={33}
-        data={isPreview ? comments.slice(comments.length - 3, comments.length) : comments}
+        data={isPreview ? comments.slice(0, 3) : comments}
         renderItem={({ item }) => <Comment comment={item} isPreview={isPreview} />}
       />
     </View>
@@ -19,14 +30,14 @@ export default function CommentsList({ comments, isPreview }: CommentListProps) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // minHeight used to avoid FlashList's rendered size is not usable
+    minHeight: 20,
   },
 });
 
 export type CommentListProps = {
   comments: [CommentData];
   isPreview?: boolean;
-} & typeof defaultProps;
-
-const defaultProps = {
-  isPreview: false,
+  style?: RegisteredStyle<ViewStyle>;
+  reverse?: boolean;
 };
