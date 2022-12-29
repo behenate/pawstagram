@@ -4,16 +4,140 @@
   "likedByLoggedInUser": true,
   "images": ["https://i.ytimg.com/vi/xWDf0WSWKXw/hqdefault.jpg"],
   "text": "Check out this picture of my dog!",
-  "comments": [{
-    "creator": "sdfsdfds",
-    "likes": 33000,
-    "likedByLoggedInUser": false,
-    "text": "BRO UR DOG BE SUS"
-  },
+  "comments": [
     {
       "creator": "coolGuy69",
       "likes": 232,
       "likedByLoggedInUser": false,
       "text": "Holy shit that dog look sus"
-    }]
+    },
+    {
+      "creator": "suspicoiusLookinMan",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "SUUUUS"
+    },
+    {
+      "creator": "ssssnake",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "We got impostor among us"
+    },
+    {
+      "creator": "fatBoy3",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Bro he be high af"
+    },
+    {
+      "creator": "bigDogFan",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Snoop Dog"
+    },
+    {
+      "creator": "BigCatFan",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Hyhyhy"
+    },
+    {
+      "creator": "granny16",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Very funny dog im going to show it to my grandson"
+    },
+    {
+      "creator": "meh123",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Another dog be sus"
+    },
+    {
+      "creator": "Cake15",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Im hungry"
+    },
+    {
+      "creator": "cameraMan",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Look at this dog! HAHA"
+    },
+    {
+      "creator": "SMOKER12",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Bro look at his eyes"
+    },
+    {
+      "creator": "alcomaister3",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Idk about this man, you be seeming kinda sus lately"
+    },
+    {
+      "creator": "apologizer3",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "I would like to apologize for my dog this is my dog and he is very good boy im not apologizing for anything fuck you"
+    },
+    {
+      "creator": "photoSteal",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Can I post this sussy baka dog on my page?"
+    },
+    {
+      "creator": "susGuyGuy",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "This is one sus looking doggo"
+    },
+    {
+      "creator": "impostor",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "Look at his eras!"
+    },{
+      "creator": "spanishLaugh",
+      "likes": 232,
+      "likedByLoggedInUser": false,
+      "text": "JAJAJAJAJAJAJAJA"
+    },{
+      "creator": "sdfsdfds",
+      "likes": 33000,
+      "likedByLoggedInUser": false,
+      "text": "BRO UR DOG BE SUS",
+      "replies": [
+        {
+          "creator": "coolGuy67",
+          "likes": 232,
+          "likedByLoggedInUser": false,
+          "text": "1"
+        },{
+          "creator": "coolGuy68",
+          "likes": 232,
+          "likedByLoggedInUser": false,
+          "text": "2"
+        },{
+          "creator": "coolGuy65",
+          "likes": 232,
+          "likedByLoggedInUser": false,
+          "text": "3"
+        },{
+          "creator": "coolGuy63",
+          "likes": 232,
+          "likedByLoggedInUser": false,
+          "text": "4"
+        },{
+          "creator": "coolGuy62",
+          "likes": 232,
+          "likedByLoggedInUser": false,
+          "text": "5"
+        }
+      ]
+    }
+  ]
 }

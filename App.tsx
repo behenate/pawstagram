@@ -11,6 +11,7 @@ import { HomeScreenParams } from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import HomeTabNavigation from './src/navigation/HomeTabNavigation';
+import PostScreen from './src/screens/PostScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -35,6 +36,7 @@ export default function App() {
           <Stack.Screen name={'Success'} component={SuccessScreen} />
           <Stack.Screen name={'HomeNavigation'} component={HomeTabNavigation} />
           <Stack.Screen name={'Settings'} component={SettingsScreen} />
+          <Stack.Screen name={'Post'} component={PostScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
@@ -48,6 +50,7 @@ export type RootStackParamList = {
   Register: undefined;
   HomeNavigation: HomeScreenParams;
   Settings: undefined;
+  Post: PostScreenParams;
 };
 
 const theme = {
