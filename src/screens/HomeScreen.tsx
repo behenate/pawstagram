@@ -1,25 +1,41 @@
 import CommonContainer from '../containers/CommonContainer';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { User } from '../types/User';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import HomeFeed from '../components/HomeFeed';
 import { PostData } from '../types/PostData';
-import { Button, IconButton, MD3Theme, useTheme } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { IconButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
+import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { auth, firestore } from '../firebase/config';
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const styles = useStyles(useTheme());
 
-  const post = require('../assets/testPost.json') as PostData;
-  const posts = Array(100);
-  for (let i = 0; i < 100; i++) {
-    posts[i] = post;
-  }
+  const [posts, setPosts] = useState<[PostData?]>([]);
+  const followsCollection = collection(firestore, 'follows');
+  const postsCollection = collection(firestore, 'posts');
+  const followingQuery = query(followsCollection, where('followerId', '==', auth.currentUser?.uid));
+  const postsQuery = (creatorId: string) =>
+    query(postsCollection, where('creator', '==', creatorId), orderBy('timestamp', 'desc'));
 
+  useEffect(() => {
+    getDocs(followingQuery).then((results) => {
+      const gotPosts: [PostData?] = [];
+      results.forEach((result) => {
+        const followedId = result.data().followedId;
+        getDocs(postsQuery(followedId))
+          .then((followedPosts) => {
+            followedPosts.forEach((followedPost) => {
+              gotPosts.push(followedPost.data() as PostData);
+            });
+          })
+          .then(() => setPosts(gotPosts));
+      });
+    });
+  }, []);
   return (
     <CommonContainer style={styles.container} useTouchableOpacity={false}>
       <HomeFeed posts={posts as [PostData]} />
@@ -33,35 +49,34 @@ export default function HomeScreen() {
   );
 }
 
-const useStyles = (theme: MD3Theme) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    title: {
-      textAlign: 'center',
-      marginBottom: 20,
-    },
-    register: {
-      marginBottom: 20,
-    },
-    prompt: {
-      textAlign: 'center',
-      marginBottom: 10,
-    },
-    button: {
-      position: 'absolute',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingHorizontal: 5,
-      paddingVertical: 5,
-      width: 50,
-      height: 50,
-      bottom: 10,
-      right: 10,
-    },
-  });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  register: {
+    marginBottom: 20,
+  },
+  prompt: {
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  button: {
+    position: 'absolute',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    width: 50,
+    height: 50,
+    bottom: 10,
+    right: 10,
+  },
+});
 
 export type HomeScreenParams = {
   userData: User;

@@ -1,18 +1,38 @@
 import { View, Text } from 'react-native';
 import React, { useState } from 'react';
 import { Button, TextInput } from 'react-native-paper';
-import { collection } from 'firebase/firestore';
-import { firestore } from '../firebase/config';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, firestore } from '../firebase/config';
+import { PostData } from '../types/PostData';
+import { useNavigation } from '@react-navigation/native';
 
 export default function NewPostScreen() {
-  const [postText, setPostText] = useState('Dupa');
+  const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [postText, setPostText] = useState('Test');
   const [imageUrl, setImageUrl] = useState(
     'https://dogsontheloose.com/wp-content/uploads/2015/07/top-dog-videos.jpg'
   );
 
-  const register = () => {
+  const post = () => {
+    setIsLoading(true);
+    const user = auth.currentUser;
     const postsRef = collection(firestore, 'posts');
+    const data: PostData = {
+      creator: user ? user.uid : '',
+      likes: 0,
+      text: postText,
+      comments: [],
+      images: [imageUrl],
+      timestamp: serverTimestamp(),
+    };
+    addDoc(postsRef, data).then(() => {
+      setIsLoading(false);
+      alert('Post added :))');
+      navigation.goBack();
+    });
   };
+
   return (
     <View>
       <Text>Hello, this is a test page for adding posts</Text>
@@ -31,8 +51,9 @@ export default function NewPostScreen() {
       <Button
         icon={'send'}
         mode={'contained'}
+        loading={isLoading}
         onPress={() => {
-          alert('Sending the post :))');
+          post();
         }}>
         Send
       </Button>
