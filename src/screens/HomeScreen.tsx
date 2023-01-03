@@ -11,6 +11,7 @@ export default function HomeScreen() {
   for (let i = 0; i < 100; i++) {
     posts[i] = post;
   }
+
   return (
     <CommonContainer style={styles.container} useTouchableOpacity={false}>
       <HomeFeed posts={posts as [PostData]} />
@@ -21,8 +22,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   title: {
     textAlign: 'center',

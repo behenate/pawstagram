@@ -1,54 +1,26 @@
 import { MD3Theme, Text, useTheme } from 'react-native-paper';
 import { PostData } from '../types/PostData';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import Post from './Post';
+import CommentsList from './CommentsList';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App';
 
-export default function PostCard({ post }: PostProps) {
+export default function PostCard({ post }: PostCardProps) {
   const theme = useTheme();
   const styles = useStyles(theme);
-  const [liked, setLiked] = useState(post.likedByLoggedInUser);
-  const iconName = liked ? 'cards-heart' : 'cards-heart-outline';
-  const iconColor = liked ? 'red' : 'black';
-  const iconSize = 30;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
   return (
     <View style={styles.container}>
-      <View style={styles.userInfoContainer}>
-        <MaterialCommunityIcons name={'account-circle'} size={48} color={theme.colors.primary} />
-        <View style={styles.usernameAndDate}>
-          <Text style={theme.fonts.titleSmall}>{post.creator}</Text>
-          <Text style={theme.fonts.labelSmall}>Posted on: 01/01/2023</Text>
-        </View>
-      </View>
-      {post.images && <Image source={{ uri: post.images[0] }} style={styles.image} />}
-      <Text style={styles.postText}>
-        <Text style={theme.fonts.titleSmall}>{post.creator}: </Text>
-        <Text>{post.text}</Text>
-      </Text>
-      <View style={styles.controlsContainer}>
-        <TouchableOpacity
-          onPress={() => setLiked(!liked)}
-          hitSlop={{ bottom: 30, top: 30, left: 30, right: 30 }}>
-          <MaterialCommunityIcons name={iconName} size={iconSize} color={iconColor} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <MaterialCommunityIcons size={iconSize - 5} name={'comment'} color={'lightblue'} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <MaterialCommunityIcons size={iconSize} name={'share'} color={'aquamarine'} />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.commentsPreviewContainer}>
+      <Post post={post} />
+      <TouchableOpacity
+        style={styles.commentsPreviewContainer}
+        onPress={() => navigation.navigate('Post', { post })}>
         <Text style={theme.fonts.titleSmall}>Comments:</Text>
-        {post.comments.slice(0, 3).map((comment) => (
-          <Text>
-            {' '}
-            <Text style={theme.fonts.titleSmall}>{comment.creator}: </Text>
-            <Text>{comment.text}</Text>
-          </Text>
-        ))}
-      </View>
+        <CommentsList comments={post.comments} isPreview={true} />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -97,6 +69,6 @@ const useStyles = (theme: MD3Theme) =>
     },
   });
 
-type PostProps = {
+type PostCardProps = {
   post: PostData;
 };

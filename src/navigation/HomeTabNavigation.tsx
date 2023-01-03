@@ -31,6 +31,7 @@ export default function HomeTabNavigation(props: HomeTabNavigationProps) {
       ),
     });
   }, []);
+  // @ts-ignore
   return (
     <Tab.Navigator initialRouteName={'Home'} backBehavior={'history'}>
       <Tab.Screen
@@ -49,6 +50,7 @@ export default function HomeTabNavigation(props: HomeTabNavigationProps) {
           <HomeScreen
             {...p}
             // ☠️☠️☠️☠️☠️☠️☠️☠️☠️☠️
+            //@ts-ignore
             route={props.route as unknown as RouteProp<RootStackParamListTabs, 'Home'>}
           />
         )}

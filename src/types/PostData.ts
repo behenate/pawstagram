@@ -1,9 +1,9 @@
-import type { Comment } from './Comment';
+import type { CommentData } from './CommentData';
 export type PostData = {
   creator: string;
   likes: number;
   likedByLoggedInUser: boolean;
   images?: [string];
   text?: string;
-  comments: [Comment];
+  comments: [CommentData];
 };
