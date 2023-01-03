@@ -10,6 +10,7 @@ export default function HomeFeed({ posts }: HomeFeedProps) {
     <View style={{ flex: 1 }}>
       <FlashList<PostData>
         data={posts}
+        contentContainerStyle={{ paddingBottom: 8 }}
         estimatedItemSize={300}
         renderItem={({ item }) => <PostCard post={item} />}
         ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
