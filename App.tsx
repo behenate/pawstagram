@@ -12,6 +12,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import HomeTabNavigation from './src/navigation/HomeTabNavigation';
 import PostScreen, { PostScreenParams } from './src/screens/PostScreen';
+import NewPostScreen from './src/screens/NewPostScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -37,6 +38,7 @@ export default function App() {
           <Stack.Screen name={'HomeNavigation'} component={HomeTabNavigation} />
           <Stack.Screen name={'Settings'} component={SettingsScreen} />
           <Stack.Screen name={'Post'} component={PostScreen} />
+          <Stack.Screen name={'NewPost'} component={NewPostScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
@@ -51,6 +53,7 @@ export type RootStackParamList = {
   HomeNavigation: HomeScreenParams;
   Settings: undefined;
   Post: PostScreenParams;
+  NewPost: undefined;
 };
 
 const theme = {
@@ -58,7 +61,7 @@ const theme = {
   // Specify custom property
   myOwnProperty: true,
   // Specify custom property in nested object
-  roundness: 10,
+  roundness: 3,
   version: 3,
   colors: {
     primary: 'rgb(117,120,196)',
