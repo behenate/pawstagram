@@ -1,8 +1,6 @@
 import { MD3Theme, Text, useTheme } from 'react-native-paper';
 import { PostData } from '../types/PostData';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Post from './Post';
 import CommentsList from './CommentsList';
 import { useNavigation } from '@react-navigation/native';

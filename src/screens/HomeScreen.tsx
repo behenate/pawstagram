@@ -1,5 +1,5 @@
 import CommonContainer from '../containers/CommonContainer';
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { User } from '../types/User';
 import React from 'react';
 import HomeFeed from '../components/HomeFeed';
@@ -11,6 +11,7 @@ export default function HomeScreen() {
   for (let i = 0; i < 100; i++) {
     posts[i] = post;
   }
+
   return (
     <CommonContainer style={styles.container} useTouchableOpacity={false}>
       <HomeFeed posts={posts as [PostData]} />

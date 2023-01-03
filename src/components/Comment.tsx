@@ -1,7 +1,7 @@
 import { CommentData } from '../types/CommentData';
 import { Text, useTheme } from 'react-native-paper';
 import { useState } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 
 export default function Comment({ comment, isPreview }: CommentProps) {

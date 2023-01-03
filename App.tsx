@@ -11,7 +11,7 @@ import { HomeScreenParams } from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import HomeTabNavigation from './src/navigation/HomeTabNavigation';
-import PostScreen from './src/screens/PostScreen';
+import PostScreen, { PostScreenParams } from './src/screens/PostScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
