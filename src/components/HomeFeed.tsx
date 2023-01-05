@@ -4,11 +4,12 @@ import { FlashList } from '@shopify/flash-list';
 import React from 'react';
 import { View } from 'react-native';
 import { PostData } from '../types/PostData';
+import { QueryDocumentSnapshot } from 'firebase/firestore';
 
 export default function HomeFeed({ posts }: HomeFeedProps) {
   return (
     <View style={{ flex: 1 }}>
-      <FlashList<PostData>
+      <FlashList<QueryDocumentSnapshot<PostData>>
         data={posts}
         contentContainerStyle={{ paddingBottom: 8 }}
         estimatedItemSize={300}
@@ -21,5 +22,5 @@ export default function HomeFeed({ posts }: HomeFeedProps) {
 }
 
 type HomeFeedProps = {
-  posts: [PostData];
+  posts: [QueryDocumentSnapshot<PostData>];
 };

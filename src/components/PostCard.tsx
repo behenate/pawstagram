@@ -6,6 +6,7 @@ import CommentsList from './CommentsList';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
+import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 
 export default function PostCard({ post }: PostCardProps) {
   const theme = useTheme();
@@ -19,7 +20,7 @@ export default function PostCard({ post }: PostCardProps) {
         style={styles.commentsPreviewContainer}
         onPress={() => navigation.navigate('Post', { post })}>
         <Text style={theme.fonts.titleSmall}>Comments:</Text>
-        <CommentsList comments={post.comments} isPreview={true} />
+        <CommentsList comments={post.data().comments} isPreview={true} />
       </TouchableOpacity>
     </View>
   );
@@ -70,5 +71,5 @@ const useStyles = (theme: MD3Theme) =>
   });
 
 type PostCardProps = {
-  post: PostData;
+  post: QueryDocumentSnapshot<PostData>;
 };

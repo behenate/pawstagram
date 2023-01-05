@@ -8,12 +8,14 @@ import { TextInput } from 'react-native-paper';
 import { useEffect, useRef, useState } from 'react';
 
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { QueryDocumentSnapshot } from 'firebase/firestore';
 
 export default function PostScreen({
   route: {
     params: { post, focusTextInput = false },
   },
 }: PostScreenProps) {
+  const postData = post.data();
   const heightRef = useRef(-1);
   const refInput = useRef(null);
   // Avoid unnecessary animation after finding the actual size of the post (animation from -1 -> ~370)
@@ -71,7 +73,7 @@ export default function PostScreen({
           }}>
           <Post post={post} />
         </Animated.View>
-        <CommentsList comments={post.comments} isPreview={false} style={styles.commentsList} />
+        <CommentsList comments={postData.comments} isPreview={false} style={styles.commentsList} />
         <TextInput
           ref={refInput}
           label={'comment'}
@@ -102,6 +104,6 @@ const styles = StyleSheet.create({
 type PostScreenProps = NativeStackScreenProps<RootStackParamList, 'Post'>;
 
 export type PostScreenParams = {
-  post: PostData;
+  post: QueryDocumentSnapshot<PostData>;
   focusTextInput?: boolean;
 };

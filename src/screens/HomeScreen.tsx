@@ -8,13 +8,21 @@ import { IconButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from 'firebase/firestore';
 import { auth, firestore } from '../firebase/config';
 
 export default function HomeScreen() {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-  const [posts, setPosts] = useState<[PostData?]>([]);
+  const [posts, setPosts] = useState<[QueryDocumentSnapshot<DocumentData>?]>([]);
   const followsCollection = collection(firestore, 'follows');
   const postsCollection = collection(firestore, 'posts');
   const followingQuery = query(followsCollection, where('followerId', '==', auth.currentUser?.uid));
@@ -23,13 +31,13 @@ export default function HomeScreen() {
 
   useEffect(() => {
     getDocs(followingQuery).then((results) => {
-      const gotPosts: [PostData?] = [];
+      const gotPosts: [QueryDocumentSnapshot<DocumentData>?] = [];
       results.forEach((result) => {
         const followedId = result.data().followedId;
         getDocs(postsQuery(followedId))
           .then((followedPosts) => {
             followedPosts.forEach((followedPost) => {
-              gotPosts.push(followedPost.data() as PostData);
+              gotPosts.push(followedPost);
             });
           })
           .then(() => setPosts(gotPosts));
@@ -38,7 +46,7 @@ export default function HomeScreen() {
   }, []);
   return (
     <CommonContainer style={styles.container} useTouchableOpacity={false}>
-      <HomeFeed posts={posts as [PostData]} />
+      <HomeFeed posts={posts} />
       <IconButton
         onPress={() => navigation.navigate('NewPost')}
         mode={'contained-tonal'}
