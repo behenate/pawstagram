@@ -6,21 +6,22 @@ import CommentsList from './CommentsList';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
+import { DocumentData, DocumentSnapshot, QueryDocumentSnapshot } from 'firebase/firestore';
+import usePostManager from '../hooks/usePostManager';
 
 export default function PostCard({ post }: PostCardProps) {
   const theme = useTheme();
   const styles = useStyles(theme);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
+  const [postData, liked, toggleLike, sendingData] = usePostManager(post);
   return (
     <View style={styles.container}>
-      <Post post={post} />
+      <Post postData={postData} liked={liked} toggleLike={toggleLike} sendingData={sendingData} />
       <TouchableOpacity
         style={styles.commentsPreviewContainer}
-        onPress={() => navigation.navigate('Post', { post })}>
+        onPress={() => navigation.navigate('Post', { postData, liked, toggleLike, sendingData })}>
         <Text style={theme.fonts.titleSmall}>Comments:</Text>
-        <CommentsList comments={post.data().comments} isPreview={true} />
+        <CommentsList comments={post.data()!.comments} isPreview={true} />
       </TouchableOpacity>
     </View>
   );
@@ -31,7 +32,6 @@ const useStyles = (theme: MD3Theme) =>
     container: {
       flex: 1,
       marginHorizontal: 10,
-      padding: 0,
       justifyContent: 'center',
       borderRadius: 10,
       elevation: 5,
@@ -71,5 +71,5 @@ const useStyles = (theme: MD3Theme) =>
   });
 
 type PostCardProps = {
-  post: QueryDocumentSnapshot<PostData>;
+  post: DocumentSnapshot<PostData>;
 };

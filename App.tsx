@@ -13,10 +13,15 @@ import SettingsScreen from './src/screens/SettingsScreen';
 import HomeTabNavigation from './src/navigation/HomeTabNavigation';
 import PostScreen, { PostScreenParams } from './src/screens/PostScreen';
 import NewPostScreen from './src/screens/NewPostScreen';
+import { LogBox } from 'react-native';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  // Ignore the async storage warning caused by expo
+  LogBox.ignoreLogs([
+    'AsyncStorage has been extracted from react-native core and will be removed in a future release.',
+  ]);
   return (
     // @ts-ignore
     <PaperProvider theme={theme}>
