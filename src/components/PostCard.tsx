@@ -1,23 +1,30 @@
 import { MD3Theme, Text, useTheme } from 'react-native-paper';
-import { PostData } from '../types/PostData';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Post from './Post';
 import CommentsList from './CommentsList';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
+import usePostManager from '../hooks/usePostManager';
+import { useSelector } from 'react-redux';
+import { RootState } from '../reducers/store';
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ postId }: PostCardProps) {
   const theme = useTheme();
   const styles = useStyles(theme);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+  const { sendingData, toggleLike } = usePostManager(postId);
+  const post = useSelector((state: RootState) => state.posts[postId]);
+
   return (
     <View style={styles.container}>
-      <Post post={post} />
+      <Post post={post} liked={post.liked} onLikePressed={toggleLike} sendingData={sendingData} />
       <TouchableOpacity
         style={styles.commentsPreviewContainer}
-        onPress={() => navigation.navigate('Post', { post })}>
+        onPress={() => {
+          navigation.navigate('Post', { postId: post.id });
+        }}>
         <Text style={theme.fonts.titleSmall}>Comments:</Text>
         <CommentsList comments={post.comments} isPreview={true} />
       </TouchableOpacity>
@@ -30,7 +37,6 @@ const useStyles = (theme: MD3Theme) =>
     container: {
       flex: 1,
       marginHorizontal: 10,
-      padding: 0,
       justifyContent: 'center',
       borderRadius: 10,
       elevation: 5,
@@ -70,5 +76,5 @@ const useStyles = (theme: MD3Theme) =>
   });
 
 type PostCardProps = {
-  post: PostData;
+  postId: string;
 };

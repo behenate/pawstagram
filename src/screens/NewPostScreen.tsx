@@ -14,17 +14,18 @@ export default function NewPostScreen() {
     'https://dogsontheloose.com/wp-content/uploads/2015/07/top-dog-videos.jpg'
   );
 
-  const post = () => {
+  const addPost = () => {
     setIsLoading(true);
     const user = auth.currentUser;
     const postsRef = collection(firestore, 'posts');
     const data: PostData = {
       creator: user ? user.uid : '',
-      likes: 0,
       text: postText,
       comments: [],
       images: [imageUrl],
       timestamp: serverTimestamp(),
+      likesCount: 0,
+      commentsCount: 0,
     };
     addDoc(postsRef, data).then(() => {
       setIsLoading(false);
@@ -53,7 +54,7 @@ export default function NewPostScreen() {
         mode={'contained'}
         loading={isLoading}
         onPress={() => {
-          post();
+          addPost();
         }}>
         Send
       </Button>

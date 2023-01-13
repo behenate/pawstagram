@@ -1,22 +1,20 @@
 import { Image, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, useTheme } from 'react-native-paper';
-import { PostData } from '../types/PostData';
-import { useState } from 'react';
 import PostHeader from './PostHeader';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-
-export default function Post({ post, style }: PostProps) {
+import { Post as PostType } from '../types/Post';
+export default function Post({ post, liked, onLikePressed, sendingData, style }: PostProps) {
   const theme = useTheme();
-  const [liked, setLiked] = useState<boolean>(post.likedByLoggedInUser);
   const iconName = liked ? 'cards-heart' : 'cards-heart-outline';
   const iconColor = liked ? 'red' : 'black';
   const iconSize = 30;
 
   const isOnPostScreen = useRoute().name == 'Post';
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
   return (
     <View style={style}>
       <PostHeader post={post} />
@@ -27,13 +25,18 @@ export default function Post({ post, style }: PostProps) {
       </Text>
       <View style={styles.controlsContainer}>
         <TouchableOpacity
-          onPress={() => setLiked(!liked)}
+          onPress={() => !sendingData && onLikePressed()}
           hitSlop={{ bottom: 30, top: 30, left: 30, right: 30 }}>
           <MaterialCommunityIcons name={iconName} size={iconSize} color={iconColor} />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
-            isOnPostScreen ? undefined : navigation.navigate('Post', { post, focusTextInput: true })
+            isOnPostScreen
+              ? undefined
+              : navigation.navigate('Post', {
+                  postId: post.id,
+                  focusTextInput: true,
+                })
           }>
           <MaterialCommunityIcons size={iconSize - 5} name={'comment'} color={'lightblue'} />
         </TouchableOpacity>
@@ -41,9 +44,11 @@ export default function Post({ post, style }: PostProps) {
           <MaterialCommunityIcons size={iconSize} name={'share'} color={'aquamarine'} />
         </TouchableOpacity>
       </View>
+      <Text style={[styles.postText, theme.fonts.titleSmall]}>{post.likesCount} Likes</Text>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   image: {
     width: '100%',
@@ -58,7 +63,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   postText: {
-    paddingLeft: 25,
+    marginLeft: 25,
   },
   commentsPreviewContainer: {
     paddingLeft: 25,
@@ -66,6 +71,9 @@ const styles = StyleSheet.create({
 });
 
 type PostProps = {
-  post: PostData;
+  post: PostType;
+  liked: boolean;
+  onLikePressed: () => void;
+  sendingData: boolean;
   style?: ViewStyle;
 };

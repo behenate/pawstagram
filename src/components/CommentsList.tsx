@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 });
 
 export type CommentListProps = {
-  comments: [CommentData];
+  comments: CommentData[];
   isPreview?: boolean;
   style?: ViewStyle;
   reverse?: boolean;

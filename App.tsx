@@ -13,34 +13,47 @@ import SettingsScreen from './src/screens/SettingsScreen';
 import HomeTabNavigation from './src/navigation/HomeTabNavigation';
 import PostScreen, { PostScreenParams } from './src/screens/PostScreen';
 import NewPostScreen from './src/screens/NewPostScreen';
+import { LogBox } from 'react-native';
+import { store } from './src/reducers/store';
+import { Provider } from 'react-redux';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  // Ignore the async storage warning caused by expo
+  LogBox.ignoreLogs([
+    'AsyncStorage has been extracted from react-native core and will be removed in a future release.',
+  ]);
+
+  // LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
+
+  // @ts-ignore
   return (
     // @ts-ignore
     <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: theme.colors.primaryContainer,
-            },
-            headerTitleAlign: 'center',
-            headerTitleStyle: {
-              ...theme.fonts.titleMedium,
-            },
-          }}>
-          <Stack.Screen name={'Welcome'} component={WelcomeScreen} />
-          <Stack.Screen name={'Login'} component={LoginScreen} />
-          <Stack.Screen name={'Register'} component={RegisterScreen} />
-          <Stack.Screen name={'Success'} component={SuccessScreen} />
-          <Stack.Screen name={'HomeNavigation'} component={HomeTabNavigation} />
-          <Stack.Screen name={'Settings'} component={SettingsScreen} />
-          <Stack.Screen name={'Post'} component={PostScreen} />
-          <Stack.Screen name={'NewPost'} component={NewPostScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: theme.colors.primaryContainer,
+              },
+              headerTitleAlign: 'center',
+              headerTitleStyle: {
+                ...theme.fonts.titleMedium,
+              },
+            }}>
+            <Stack.Screen name={'Welcome'} component={WelcomeScreen} />
+            <Stack.Screen name={'Login'} component={LoginScreen} />
+            <Stack.Screen name={'Register'} component={RegisterScreen} />
+            <Stack.Screen name={'Success'} component={SuccessScreen} />
+            <Stack.Screen name={'HomeNavigation'} component={HomeTabNavigation} />
+            <Stack.Screen name={'Settings'} component={SettingsScreen} />
+            <Stack.Screen name={'Post'} component={PostScreen} />
+            <Stack.Screen name={'NewPost'} component={NewPostScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
     </PaperProvider>
   );
 }

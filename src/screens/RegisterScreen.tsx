@@ -9,10 +9,8 @@ import CommonContainer from '../containers/CommonContainer';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-import { LogBox } from 'react-native';
 import { User } from '../types/User';
 
-LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
 export default function RegisterScreen() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
