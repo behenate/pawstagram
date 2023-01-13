@@ -2,23 +2,26 @@ import {
   addDoc,
   collection,
   deleteDoc,
-  DocumentSnapshot,
+  doc,
   getDoc,
   getDocs,
   query,
   setDoc,
   where,
 } from 'firebase/firestore';
-import { PostData } from '../types/PostData';
 import { useEffect, useState } from 'react';
 import { auth, firestore } from '../firebase/config';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../reducers/store';
+import { setLiked as setLikedFn, setLikesCount as setLikesCountFn } from '../reducers/postsSlice';
 
-export default function usePostManager(
-  postOrg: DocumentSnapshot<PostData>
-): [PostData, boolean, () => void, boolean] {
-  const [post, setPost] = useState<DocumentSnapshot<PostData>>(postOrg);
-  const [postData, setPostData] = useState<PostData>(postOrg.data() as PostData);
-  const [liked, setLiked] = useState(false);
+export default function usePostManager(postId: string): PostManagement {
+  const dispatch = useDispatch();
+  const setLiked = (args: { id: string; liked: boolean }) => dispatch(setLikedFn(args));
+  const setLikesCount = (args: { id: string; likesCount: number }) =>
+    dispatch(setLikesCountFn(args));
+
+  const post = useSelector((state: RootState) => state.posts[postId]);
   const [sendingData, setSendingData] = useState(false);
 
   const userId = auth.currentUser?.uid;
@@ -32,21 +35,19 @@ export default function usePostManager(
   useEffect(() => {
     getDocs(postLikedQuery)
       .then((results) => {
-        setLiked(results.size == 1);
+        setLiked({ id: post.id, liked: results.size == 1 });
       })
       .catch((err) => alert(err));
   }, []);
 
   const toggleLike = async () => {
-    console.log('Please help', liked);
-    const prevLiked = liked.valueOf();
-    const prevPostData = { ...postData };
-    setLiked(!liked);
-    setPostData({ ...postData, likesCount: postData.likesCount + (liked ? -1 : 1) });
+    const prevLiked = post.liked.valueOf();
+    setLiked({ id: post.id, liked: !post.liked });
+    setLikesCount({ id: post.id, likesCount: post.likesCount + (post.liked ? -1 : 1) });
     try {
       setSendingData(true);
       const likedSnapshot = await getDocs(postLikedQuery);
-      if (liked) {
+      if (post.liked) {
         likedSnapshot.forEach((doc) => {
           deleteDoc(doc.ref);
         });
@@ -58,25 +59,25 @@ export default function usePostManager(
         });
         await updateLikesCount(1);
       }
-      getDoc(post.ref).then((res) => {
-        setPost(res);
-        res.data() && setPostData(res.data() as PostData);
-      });
       setSendingData(false);
     } catch (e) {
-      setLiked(prevLiked);
-      setPostData(prevPostData);
+      setLiked({ id: post.id, liked: prevLiked });
       alert('Error while liking the post' + e);
     }
   };
 
   const updateLikesCount = async (changeSizeBy: number) => {
-    const postDoc = post.ref;
+    const postDoc = doc(firestore, 'posts', post.id);
     await setDoc(postDoc, {
-      ...postData,
-      likesCount: postData.likesCount + changeSizeBy,
+      ...post,
+      likesCount: post.likesCount + changeSizeBy,
     });
   };
 
-  return [postData, liked, toggleLike, sendingData];
+  return { sendingData, toggleLike };
 }
+
+export type PostManagement = {
+  toggleLike: () => void;
+  sendingData: boolean;
+};

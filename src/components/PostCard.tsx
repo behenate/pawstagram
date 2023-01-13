@@ -1,27 +1,33 @@
 import { MD3Theme, Text, useTheme } from 'react-native-paper';
-import { PostData } from '../types/PostData';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Post from './Post';
 import CommentsList from './CommentsList';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-import { DocumentData, DocumentSnapshot, QueryDocumentSnapshot } from 'firebase/firestore';
 import usePostManager from '../hooks/usePostManager';
+import { Post as PostType } from '../types/Post';
+import { useSelector } from 'react-redux';
+import { RootState } from '../reducers/store';
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ postId }: PostCardProps) {
   const theme = useTheme();
   const styles = useStyles(theme);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [postData, liked, toggleLike, sendingData] = usePostManager(post);
+
+  const { sendingData, toggleLike } = usePostManager(postId);
+  const post = useSelector((state: RootState) => state.posts[postId]);
+
   return (
     <View style={styles.container}>
-      <Post postData={postData} liked={liked} toggleLike={toggleLike} sendingData={sendingData} />
+      <Post post={post} liked={post.liked} onLikePressed={toggleLike} sendingData={sendingData} />
       <TouchableOpacity
         style={styles.commentsPreviewContainer}
-        onPress={() => navigation.navigate('Post', { postData, liked, toggleLike, sendingData })}>
+        onPress={() => {
+          navigation.navigate('Post', { postId: post.id });
+        }}>
         <Text style={theme.fonts.titleSmall}>Comments:</Text>
-        <CommentsList comments={post.data()!.comments} isPreview={true} />
+        <CommentsList comments={post.comments} isPreview={true} />
       </TouchableOpacity>
     </View>
   );
@@ -71,5 +77,5 @@ const useStyles = (theme: MD3Theme) =>
   });
 
 type PostCardProps = {
-  post: DocumentSnapshot<PostData>;
+  postId: string;
 };

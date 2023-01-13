@@ -5,15 +5,16 @@ import React from 'react';
 import { View } from 'react-native';
 import { PostData } from '../types/PostData';
 import { DocumentSnapshot, QueryDocumentSnapshot } from 'firebase/firestore';
+import { Post } from '../types/Post';
 
-export default function HomeFeed({ posts }: HomeFeedProps) {
+export default function HomeFeed({ postIds }: HomeFeedProps) {
   return (
     <View style={{ flex: 1 }}>
-      <FlashList<DocumentSnapshot<PostData>>
-        data={posts}
+      <FlashList<string>
+        data={postIds}
         contentContainerStyle={{ paddingBottom: 8 }}
         estimatedItemSize={300}
-        renderItem={({ item }) => <PostCard post={item} />}
+        renderItem={({ item }) => <PostCard postId={item} />}
         ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
         ListHeaderComponent={<View style={{ height: 20 }} />}
       />
@@ -22,5 +23,5 @@ export default function HomeFeed({ posts }: HomeFeedProps) {
 }
 
 type HomeFeedProps = {
-  posts: DocumentSnapshot<PostData>[];
+  postIds: string[];
 };

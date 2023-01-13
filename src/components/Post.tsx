@@ -2,13 +2,12 @@ import { Image, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-nati
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, useTheme } from 'react-native-paper';
 import { PostData } from '../types/PostData';
-import { useEffect, useState } from 'react';
 import PostHeader from './PostHeader';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-import { DocumentSnapshot } from 'firebase/firestore';
-export default function Post({ postData, liked, toggleLike, sendingData, style }: PostProps) {
+import { Post as PostType } from '../types/Post';
+export default function Post({ post, liked, onLikePressed, sendingData, style }: PostProps) {
   const theme = useTheme();
   const iconName = liked ? 'cards-heart' : 'cards-heart-outline';
   const iconColor = liked ? 'red' : 'black';
@@ -16,18 +15,18 @@ export default function Post({ postData, liked, toggleLike, sendingData, style }
 
   const isOnPostScreen = useRoute().name == 'Post';
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  console.log(liked, iconColor);
+
   return (
     <View style={style}>
-      <PostHeader post={postData} />
-      {postData.images && <Image source={{ uri: postData.images[0] }} style={styles.image} />}
+      <PostHeader post={post} />
+      {post.images && <Image source={{ uri: post.images[0] }} style={styles.image} />}
       <Text style={styles.postText}>
-        <Text style={theme.fonts.titleSmall}>{postData.creator}: </Text>
-        <Text>{postData.text}</Text>
+        <Text style={theme.fonts.titleSmall}>{post.creator}: </Text>
+        <Text>{post.text}</Text>
       </Text>
       <View style={styles.controlsContainer}>
         <TouchableOpacity
-          onPress={() => !sendingData && toggleLike()}
+          onPress={() => !sendingData && onLikePressed()}
           hitSlop={{ bottom: 30, top: 30, left: 30, right: 30 }}>
           <MaterialCommunityIcons name={iconName} size={iconSize} color={iconColor} />
         </TouchableOpacity>
@@ -36,10 +35,7 @@ export default function Post({ postData, liked, toggleLike, sendingData, style }
             isOnPostScreen
               ? undefined
               : navigation.navigate('Post', {
-                  postData,
-                  liked,
-                  toggleLike,
-                  sendingData,
+                  postId: post.id,
                   focusTextInput: true,
                 })
           }>
@@ -49,7 +45,7 @@ export default function Post({ postData, liked, toggleLike, sendingData, style }
           <MaterialCommunityIcons size={iconSize} name={'share'} color={'aquamarine'} />
         </TouchableOpacity>
       </View>
-      <Text style={[styles.postText, theme.fonts.titleSmall]}>{postData.likesCount} Likes</Text>
+      <Text style={[styles.postText, theme.fonts.titleSmall]}>{post.likesCount} Likes</Text>
     </View>
   );
 }
@@ -76,9 +72,9 @@ const styles = StyleSheet.create({
 });
 
 type PostProps = {
-  postData: PostData;
+  post: PostType;
   liked: boolean;
-  toggleLike: () => void;
+  onLikePressed: () => void;
   sendingData: boolean;
   style?: ViewStyle;
 };

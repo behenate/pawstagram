@@ -1,19 +1,30 @@
-import { PostData } from '../types/PostData';
 import Post from '../components/Post';
 import CommentsList from '../components/CommentsList';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import {
+  DeviceEventEmitter,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useEffect, useRef, useState } from 'react';
-
+import { useSelector } from 'react-redux';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { RootState } from '../reducers/store';
+import usePostManager from '../hooks/usePostManager';
 
 export default function PostScreen({
   route: {
-    params: { postData, liked, toggleLike, sendingData, focusTextInput = false },
+    params: { postId, focusTextInput = false },
   },
 }: PostScreenProps) {
+  const { sendingData, toggleLike } = usePostManager(postId);
+  const post = useSelector((state: RootState) => state.posts[postId]);
+
   const heightRef = useRef(-1);
   const refInput = useRef(null);
   // Avoid unnecessary animation after finding the actual size of the post (animation from -1 -> ~370)
@@ -71,12 +82,12 @@ export default function PostScreen({
           }}>
           <Post
             sendingData={sendingData}
-            liked={liked}
-            toggleLike={toggleLike}
-            postData={postData}
+            liked={post.liked}
+            post={post}
+            onLikePressed={toggleLike}
           />
         </Animated.View>
-        <CommentsList comments={postData.comments} isPreview={false} style={styles.commentsList} />
+        <CommentsList comments={post.comments} isPreview={false} style={styles.commentsList} />
         <TextInput
           ref={refInput}
           label={'comment'}
@@ -107,9 +118,6 @@ const styles = StyleSheet.create({
 type PostScreenProps = NativeStackScreenProps<RootStackParamList, 'Post'>;
 
 export type PostScreenParams = {
-  postData: PostData;
-  liked: boolean;
-  toggleLike: () => void;
-  sendingData: boolean;
+  postId: string;
   focusTextInput?: boolean;
 };
