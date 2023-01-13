@@ -2,14 +2,7 @@ import Post from '../components/Post';
 import CommentsList from '../components/CommentsList';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import {
-  DeviceEventEmitter,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';

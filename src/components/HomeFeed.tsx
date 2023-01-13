@@ -3,9 +3,6 @@ import PostCard from './PostCard';
 import { FlashList } from '@shopify/flash-list';
 import React from 'react';
 import { View } from 'react-native';
-import { PostData } from '../types/PostData';
-import { DocumentSnapshot, QueryDocumentSnapshot } from 'firebase/firestore';
-import { Post } from '../types/Post';
 
 export default function HomeFeed({ postIds }: HomeFeedProps) {
   return (

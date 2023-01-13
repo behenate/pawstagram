@@ -3,7 +3,6 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   query,
   setDoc,
@@ -15,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../reducers/store';
 import { setLiked as setLikedFn, setLikesCount as setLikesCountFn } from '../reducers/postsSlice';
 
+// postManager is used for convenient modification state of a post such as likes comment etc.
 export default function usePostManager(postId: string): PostManagement {
   const dispatch = useDispatch();
   const setLiked = (args: { id: string; liked: boolean }) => dispatch(setLikedFn(args));

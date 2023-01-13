@@ -1,7 +1,6 @@
 import { Image, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, useTheme } from 'react-native-paper';
-import { PostData } from '../types/PostData';
 import PostHeader from './PostHeader';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';

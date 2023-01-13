@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 import usePostManager from '../hooks/usePostManager';
-import { Post as PostType } from '../types/Post';
 import { useSelector } from 'react-redux';
 import { RootState } from '../reducers/store';
 

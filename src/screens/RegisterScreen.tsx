@@ -9,7 +9,6 @@ import CommonContainer from '../containers/CommonContainer';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-import { LogBox } from 'react-native';
 import { User } from '../types/User';
 
 export default function RegisterScreen() {
