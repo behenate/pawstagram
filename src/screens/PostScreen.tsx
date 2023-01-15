@@ -80,7 +80,7 @@ export default function PostScreen({
             onLikePressed={toggleLike}
           />
         </Animated.View>
-        <CommentsList comments={post.comments} isPreview={false} style={styles.commentsList} />
+        <CommentsList comments={post.topResponses} isPreview={false} style={styles.commentsList} />
         <TextInput
           ref={refInput}
           label={'comment'}

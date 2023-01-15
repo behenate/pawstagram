@@ -1,12 +1,12 @@
 import PostCard from './PostCard';
 
 import { FlashList } from '@shopify/flash-list';
-import React from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
 
 export default function HomeFeed({ postIds }: HomeFeedProps) {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 }} key={postIds.toString()}>
       <FlashList<string>
         data={postIds}
         contentContainerStyle={{ paddingBottom: 8 }}

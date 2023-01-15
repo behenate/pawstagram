@@ -21,7 +21,6 @@ export default function NewPostScreen() {
     const data: PostData = {
       creator: user ? user.uid : '',
       text: postText,
-      comments: [],
       images: [imageUrl],
       timestamp: serverTimestamp(),
       likesCount: 0,

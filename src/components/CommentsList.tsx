@@ -3,7 +3,7 @@ import { StyleSheet, View, ViewStyle } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Comment from './Comment';
 import { FlashList } from '@shopify/flash-list';
-
+import { Comment as CommentType } from '../types/Comment';
 export default function CommentsList({
   comments,
   isPreview = false,
@@ -19,7 +19,7 @@ export default function CommentsList({
   }, []);
   return (
     <View style={[styles.container, style]}>
-      <FlashList<CommentData>
+      <FlashList<CommentType>
         estimatedItemSize={33}
         data={isPreview ? comments.slice(0, 3) : comments}
         renderItem={({ item }) => <Comment comment={item} isPreview={isPreview} />}
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 });
 
 export type CommentListProps = {
-  comments: CommentData[];
+  comments: CommentType[];
   isPreview?: boolean;
   style?: ViewStyle;
   reverse?: boolean;

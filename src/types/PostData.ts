@@ -6,7 +6,7 @@ export type PostData = {
   timestamp: FieldValue;
   images: Array<string>;
   text?: string;
-  comments: Array<CommentData>;
+  // Stores a few comments to show on previews without fetching all the comments
   commentsCount: number;
   likesCount: number;
 };

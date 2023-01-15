@@ -16,7 +16,6 @@ export default function PostCard({ postId }: PostCardProps) {
 
   const { sendingData, toggleLike } = usePostManager(postId);
   const post = useSelector((state: RootState) => state.posts[postId]);
-
   return (
     <View style={styles.container}>
       <Post post={post} liked={post.liked} onLikePressed={toggleLike} sendingData={sendingData} />
@@ -26,7 +25,7 @@ export default function PostCard({ postId }: PostCardProps) {
           navigation.navigate('Post', { postId: post.id });
         }}>
         <Text style={theme.fonts.titleSmall}>Comments:</Text>
-        <CommentsList comments={post.comments} isPreview={true} />
+        <CommentsList comments={post.topResponses} isPreview={true} />
       </TouchableOpacity>
     </View>
   );
