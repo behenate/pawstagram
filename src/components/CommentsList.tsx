@@ -1,15 +1,17 @@
-import type { CommentData } from '../types/CommentData';
 import { StyleSheet, View, ViewStyle } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import Comment from './Comment';
 import { FlashList } from '@shopify/flash-list';
 import { Comment as CommentType } from '../types/Comment';
+
 export default function CommentsList({
   comments,
   isPreview = false,
   style,
   reverse = true,
-  flashListProps,
+  onEndReached,
+  onEndReachedThreshold = 0.3,
+  ListFooterComponent,
 }: CommentListProps) {
   const [commentsProcessed] = useState(comments.slice());
   useEffect(() => {
@@ -23,7 +25,9 @@ export default function CommentsList({
         estimatedItemSize={33}
         data={isPreview ? comments.slice(0, 3) : comments}
         renderItem={({ item }) => <Comment comment={item} isPreview={isPreview} />}
-        {...flashListProps}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={onEndReachedThreshold}
+        ListFooterComponent={ListFooterComponent}
       />
     </View>
   );
@@ -42,5 +46,7 @@ export type CommentListProps = {
   isPreview?: boolean;
   style?: ViewStyle;
   reverse?: boolean;
-  flashListProps?: object;
+  onEndReached?: () => void;
+  onEndReachedThreshold?: number;
+  ListFooterComponent?: ReactElement;
 };

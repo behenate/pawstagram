@@ -1,4 +1,3 @@
-import { CommentData } from '../types/CommentData';
 import { Text, useTheme } from 'react-native-paper';
 import { useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
@@ -9,8 +8,8 @@ export default function Comment({ comment, isPreview }: CommentProps) {
   const theme = useTheme();
   const [repliesVisible, setRepliesVisible] = useState(false);
   const replies = isPreview
-    ? comment.topResponses?.slice(comment.topResponses?.length - 3, comment.topResponses?.length)
-    : comment.topResponses;
+    ? comment.topComments?.slice(comment.topComments?.length - 3, comment.topComments?.length)
+    : comment.topComments;
 
   return (
     <View>

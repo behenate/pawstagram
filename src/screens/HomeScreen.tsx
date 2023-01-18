@@ -1,9 +1,8 @@
 import CommonContainer from '../containers/CommonContainer';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { User } from '../types/User';
 import React, { useEffect, useState } from 'react';
 import HomeFeed from '../components/HomeFeed';
-import { PostData } from '../types/PostData';
 import { IconButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -15,25 +14,24 @@ import {
   where,
   orderBy,
   QueryDocumentSnapshot,
-  getDoc,
 } from 'firebase/firestore';
 import { auth, firestore } from '../firebase/config';
 import { Post as PostType } from '../types/Post';
 import { useDispatch } from 'react-redux';
 import { addPost } from '../reducers/postsSlice';
-import { usePostFetch } from '../hooks/usePostFetch';
+import { queryAdditionalPostData } from '../queryFunctions/queryAdditionalPostData';
 import FullscreenLoading from '../components/FullscreenLoading';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
+  const userId = auth.currentUser?.uid;
   const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [postIds, setPostIds] = useState<string[]>([]);
-  const { fetchPost } = usePostFetch();
 
   const followsCollection = collection(firestore, 'follows');
   const postsCollection = collection(firestore, 'posts');
-  const followingQuery = query(followsCollection, where('followerId', '==', auth.currentUser?.uid));
+  const followingQuery = query(followsCollection, where('followerId', '==', userId));
   const postsQuery = (creatorId: string) =>
     query(postsCollection, where('creator', '==', creatorId), orderBy('timestamp', 'desc'));
 
@@ -48,14 +46,16 @@ export default function HomeScreen() {
         const followedId = result.data().followedId;
         getDocs(postsQuery(followedId)).then((followedPosts) => {
           followedPosts.forEach((followedPost) => {
-            fetchPost(followedPost as QueryDocumentSnapshot<PostType>).then((post) => {
-              dispatch(addPost(post));
-              gotPostIds.push(followedPost.id);
-              if (gotPostIds.length == followedPosts.size) {
-                setIsLoading(false);
-                setPostIds(gotPostIds);
+            queryAdditionalPostData(followedPost as QueryDocumentSnapshot<PostType>).then(
+              (post) => {
+                dispatch(addPost(post));
+                gotPostIds.push(followedPost.id);
+                if (gotPostIds.length == followedPosts.size) {
+                  setIsLoading(false);
+                  setPostIds(gotPostIds);
+                }
               }
-            });
+            );
           });
         });
       });

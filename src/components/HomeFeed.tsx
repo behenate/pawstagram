@@ -1,8 +1,8 @@
 import PostCard from './PostCard';
 
 import { FlashList } from '@shopify/flash-list';
-import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 
 export default function HomeFeed({ postIds }: HomeFeedProps) {
   return (

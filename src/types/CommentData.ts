@@ -1,5 +1,3 @@
 import { PostData } from './PostData';
 
-export type CommentData = PostData & {
-  respondsTo: string;
-};
+export type CommentData = PostData & { respondsTo: string };
