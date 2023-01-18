@@ -1,15 +1,15 @@
-import { CommentData } from '../types/CommentData';
 import { Text, useTheme } from 'react-native-paper';
 import { useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
+import { Comment as CommentType } from '../types/Comment';
 
 export default function Comment({ comment, isPreview }: CommentProps) {
   const theme = useTheme();
   const [repliesVisible, setRepliesVisible] = useState(false);
   const replies = isPreview
-    ? comment.replies?.slice(comment.replies?.length - 3, comment.replies?.length)
-    : comment.replies;
+    ? comment.topComments?.slice(comment.topComments?.length - 3, comment.topComments?.length)
+    : comment.topComments;
 
   return (
     <View>
@@ -45,7 +45,7 @@ export default function Comment({ comment, isPreview }: CommentProps) {
 }
 
 type CommentProps = {
-  comment: CommentData;
+  comment: CommentType;
   isPreview?: boolean;
 } & typeof defaultProps;
 

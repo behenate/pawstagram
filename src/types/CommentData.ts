@@ -1,8 +1,3 @@
-export type CommentData = {
-  creator: string;
-  likes: number;
-  likedByLoggedInUser: boolean;
-  images?: [string];
-  text?: string;
-  replies?: [CommentData];
-};
+import { PostData } from './PostData';
+
+export type CommentData = PostData & { respondsTo: string };
