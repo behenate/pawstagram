@@ -2,7 +2,7 @@ import CommonContainer from '../containers/CommonContainer';
 import { StyleSheet } from 'react-native';
 import { User } from '../types/User';
 import React, { useEffect, useState } from 'react';
-import HomeFeed from '../components/HomeFeed';
+import PostFeed from '../components/PostFeed';
 import { IconButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -59,6 +59,11 @@ export default function HomeScreen() {
           });
         });
       });
+      const users = collection(firestore, 'users');
+      const userQuery = query(users, where('id', '==', userId));
+      const usersFetched = await getDocs(userQuery);
+      const user = usersFetched.docs[0];
+      navigation.navigate('Profile', user.data() as User);
     };
     loadPosts().catch(console.error);
   }, []);
@@ -66,7 +71,10 @@ export default function HomeScreen() {
     <FullscreenLoading />
   ) : (
     <CommonContainer style={styles.container} useTouchableOpacity={false}>
-      <HomeFeed postIds={postIds} />
+      <PostFeed
+        postIds={postIds}
+        emptyFeedText={'Your feed is empty! Follow your friends to see their posts!'}
+      />
       <IconButton
         onPress={() => navigation.navigate('NewPost')}
         mode={'contained-tonal'}
