@@ -2,10 +2,18 @@ import PostCard from './PostCard';
 
 import { FlashList } from '@shopify/flash-list';
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
-export default function HomeFeed({ postIds }: HomeFeedProps) {
-  return (
+export default function PostFeed({
+  postIds,
+  emptyFeedText = 'This feed is empty :((',
+}: HomeFeedProps) {
+  return postIds.length == 0 ? (
+    <View style={styles.emptyFeed}>
+      <Text style={useTheme().fonts.bodyMedium}>{emptyFeedText}</Text>
+    </View>
+  ) : (
     <View style={{ flex: 1 }} key={postIds.toString()}>
       <FlashList<string>
         data={postIds}
@@ -19,6 +27,15 @@ export default function HomeFeed({ postIds }: HomeFeedProps) {
   );
 }
 
+const styles = StyleSheet.create({
+  emptyFeed: {
+    flex: 1,
+    alignItems: 'center',
+    margin: 30,
+  },
+});
+
 type HomeFeedProps = {
   postIds: string[];
+  emptyFeedText?: string;
 };

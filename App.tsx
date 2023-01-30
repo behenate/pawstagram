@@ -16,6 +16,7 @@ import NewPostScreen from './src/screens/NewPostScreen';
 import { LogBox } from 'react-native';
 import { store } from './src/reducers/store';
 import { Provider } from 'react-redux';
+import ProfileScreen, { ProfileScreenParams } from './src/screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -51,6 +52,7 @@ export default function App() {
             <Stack.Screen name={'Settings'} component={SettingsScreen} />
             <Stack.Screen name={'Post'} component={PostScreen} />
             <Stack.Screen name={'NewPost'} component={NewPostScreen} />
+            <Stack.Screen name={'Profile'} component={ProfileScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
@@ -67,6 +69,7 @@ export type RootStackParamList = {
   Settings: undefined;
   Post: PostScreenParams;
   NewPost: undefined;
+  Profile: ProfileScreenParams;
 };
 
 const theme = {
