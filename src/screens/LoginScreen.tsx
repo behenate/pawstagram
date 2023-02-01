@@ -4,14 +4,17 @@ import { Button, TextInput } from 'react-native-paper';
 import { Keyboard, StyleSheet, View } from 'react-native';
 import { auth, firestore } from '../firebase/config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import { collection, doc, FieldValue, getDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { User } from '../types/User';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 import CommonContainer from '../containers/CommonContainer';
+import { useDispatch } from 'react-redux';
+import { setCurrentUser } from '../reducers/currentUserSlice';
 
 export default function LoginScreen() {
+  const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [email, setEmail] = useState('dino@gmail.com');
   const [password, setPassword] = useState('123456');
@@ -28,6 +31,18 @@ export default function LoginScreen() {
           if (!document.exists()) {
             alert("User doesn't exist!");
             return;
+          }
+          const user = document.data() as User;
+          if (!(user.registrationDate instanceof FieldValue)) {
+            dispatch(
+              setCurrentUser({
+                ...user,
+                registrationDate: {
+                  seconds: user.registrationDate.seconds,
+                  nanoseconds: user.registrationDate.nanoseconds,
+                },
+              })
+            );
           }
           navigation.reset({
             index: 0,

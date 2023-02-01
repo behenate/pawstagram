@@ -34,6 +34,7 @@ export function usePaginatedComments(respondTo: string, pageSize: number = 20) {
   const loadNextPage = async () => {
     const next =
       comments.length != 0 &&
+      lastVisible != undefined &&
       query(
         commentsCollection,
         where('respondsTo', '==', respondTo),
@@ -41,10 +42,13 @@ export function usePaginatedComments(respondTo: string, pageSize: number = 20) {
         startAfter(lastVisible),
         limit(pageSize)
       );
+    if (!canLoadMore) {
+      return [];
+    }
 
     const newComments: Comment[] = [];
     const results = await getDocs(next ? next : first);
-    setCanLoadMore(results.docs.length > 0);
+    setCanLoadMore(results.docs.length == pageSize);
 
     results.forEach((result) => {
       queryAdditionalCommentData(result as QueryDocumentSnapshot<CommentData>).then((comment) => {
@@ -52,6 +56,7 @@ export function usePaginatedComments(respondTo: string, pageSize: number = 20) {
         if (newComments.length == results.docs.length) {
           setComments([...comments, ...newComments]);
           setLastVisible(results.docs[results.docs.length - 1]);
+          return newComments;
         }
       });
     });

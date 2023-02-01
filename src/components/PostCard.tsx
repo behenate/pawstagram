@@ -6,17 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 import usePostManager from '../hooks/usePostManager';
-import { useSelector } from 'react-redux';
-import { RootState } from '../reducers/store';
 
-export default function PostCard({ postId }: PostCardProps) {
+import { Post as PostType } from '../types/Post';
+export default function PostCard({ post }: PostCardProps) {
   const theme = useTheme();
   const styles = useStyles(theme);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
-  const { sendingData, toggleLike } = usePostManager(postId);
-  const post = useSelector((state: RootState) => state.posts[postId]);
-  const newComments = useSelector((state: RootState) => state.posts[postId].newComments);
+  const { sendingData, toggleLike } = usePostManager(post.id);
   return (
     <View style={styles.container}>
       <Post post={post} liked={post.liked} onLikePressed={toggleLike} sendingData={sendingData} />
@@ -27,7 +23,7 @@ export default function PostCard({ postId }: PostCardProps) {
         }}>
         <Text style={theme.fonts.titleSmall}>Comments:</Text>
         <CommentsList
-          comments={[...newComments.slice().reverse(), ...post.topComments]}
+          comments={[...post.newComments.slice().reverse(), ...post.topComments]}
           isPreview={true}
         />
       </TouchableOpacity>
@@ -79,5 +75,5 @@ const useStyles = (theme: MD3Theme) =>
   });
 
 type PostCardProps = {
-  postId: string;
+  post: PostType;
 };

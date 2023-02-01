@@ -10,7 +10,7 @@ export default function CommentsList({
   style,
   reverse = true,
   onEndReached,
-  onEndReachedThreshold = 0.3,
+  onEndReachedThreshold = 0.5,
   ListFooterComponent,
 }: CommentListProps) {
   const [commentsProcessed] = useState(comments.slice());

@@ -5,8 +5,8 @@ export type User = {
   email: string;
   fullName: string;
   avatar: string;
-  followers: number;
-  following: number;
+  followersCount: number;
+  followingCount: number;
   postsCount: number;
   isOnline: boolean;
   registrationDate: { nanoseconds: number; seconds: number } | FieldValue;

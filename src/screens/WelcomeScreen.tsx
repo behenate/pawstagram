@@ -4,13 +4,16 @@ import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import { collection, doc, FieldValue, getDoc } from 'firebase/firestore';
 import { auth, firestore } from '../firebase/config';
 import { User } from '../types/User';
 import { useEffect, useState } from 'react';
 import FullscreenLoading from '../components/FullscreenLoading';
+import { setCurrentUser } from '../reducers/currentUserSlice';
+import { useDispatch } from 'react-redux';
 
 export default function WelcomeScreen() {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +24,19 @@ export default function WelcomeScreen() {
       if (user) {
         getDoc(doc(usersCollection, user.uid))
           .then((document) => {
+            const user = document.data() as User;
             if (document.exists()) {
+              if (!(user.registrationDate instanceof FieldValue)) {
+                dispatch(
+                  setCurrentUser({
+                    ...user,
+                    registrationDate: {
+                      seconds: user.registrationDate.seconds,
+                      nanoseconds: user.registrationDate.nanoseconds,
+                    },
+                  })
+                );
+              }
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'HomeNavigation', params: { userData: document.data() as User } }],

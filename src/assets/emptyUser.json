@@ -1,0 +1,11 @@
+{
+  "id": "1234",
+  "email": "1234",
+  "fullName": "1234",
+  "avatar": "123123",
+  "followersCount": 123,
+  "followingCount": 123,
+  "postsCount": 123,
+  "isOnline": false,
+  "registrationDate": { "nanoseconds": 123, "seconds": 123 }
+}
