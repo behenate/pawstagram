@@ -11,7 +11,6 @@ import { RootState } from '../reducers/store';
 export default function NewPostScreen() {
   const navigation = useNavigation();
   const currentUser = useSelector((state: RootState) => state.currentUser);
-
   const [isLoading, setIsLoading] = useState(false);
   const [postText, setPostText] = useState('Test');
   const [imageUrl, setImageUrl] = useState(

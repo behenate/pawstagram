@@ -7,13 +7,12 @@ import { IconButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-import { auth, firestore } from '../firebase/config';
+import { auth } from '../firebase/config';
 import { useDispatch, useSelector } from 'react-redux';
 import FullscreenLoading from '../components/FullscreenLoading';
 import usePaginatedPosts from '../hooks/usePaginatedPosts';
 import queryFollowingList from '../queryFunctions/queryFollowingList';
 import { addPost } from '../reducers/postsSlice';
-import { collection, getDocs, query, where } from 'firebase/firestore';
 import { RootState } from '../reducers/store';
 
 export default function HomeScreen() {
@@ -43,11 +42,6 @@ export default function HomeScreen() {
       const follows = await queryFollowingList(userId!);
       setAuthors(follows);
       setIsLoading(false);
-      const users = collection(firestore, 'users');
-      const userQuery = query(users, where('id', '==', userId));
-      const usersFetched = await getDocs(userQuery);
-      const user = usersFetched.docs[0];
-      navigation.navigate('Profile', user.data() as User);
     };
     loadFollowing().catch((e) => Error(e));
   }, []);

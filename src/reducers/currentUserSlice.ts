@@ -9,7 +9,7 @@ import emptyUser from '../assets/emptyUser.json';
 // Define the initial state using that type
 const initialState: User = emptyUser as User;
 export const currentUserSlice = createSlice({
-  name: 'posts',
+  name: 'currentUser',
   initialState: initialState,
   reducers: {
     setCurrentUser: (state, action: PayloadAction<User>) => {

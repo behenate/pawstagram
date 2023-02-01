@@ -8,26 +8,41 @@ import { RouteProp, useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useEffect } from 'react';
-import { Button } from 'react-native-paper';
+import { IconButton, useTheme } from 'react-native-paper';
+import { useSelector } from 'react-redux';
+import { RootState } from '../reducers/store';
 
 const Tab = createMaterialBottomTabNavigator<RootStackParamListTabs>();
 
 export default function HomeTabNavigation(props: HomeTabNavigationProps) {
+  const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const currentUser = useSelector((state: RootState) => state.currentUser);
   useEffect(() => {
     navigation.setOptions({
       headerTitle: 'Pawstagram',
+      headerLeft: () => (
+        <IconButton
+          icon={'account'}
+          size={22}
+          style={{
+            left: -15,
+          }}
+          iconColor={theme.colors.primary}
+          onPress={() => navigation.navigate('Profile', { ...currentUser })}
+        />
+      ),
       headerRight: () => (
-        <Button
+        <IconButton
           icon={'menu'}
-          contentStyle={{
-            flexDirection: 'row-reverse',
+          size={20}
+          style={{
             // Adding offset, because the default padding is too much, and can't be removed
             left: 10,
           }}
-          onPress={() => navigation.navigate('Settings')}>
-          {''}
-        </Button>
+          iconColor={theme.colors.primary}
+          onPress={() => navigation.navigate('Settings')}
+        />
       ),
     });
   }, []);
