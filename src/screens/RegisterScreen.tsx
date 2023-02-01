@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { auth, firestore } from '../firebase/config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import CommonContainer from '../containers/CommonContainer';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -35,6 +35,12 @@ export default function RegisterScreen() {
           id: uid,
           email,
           fullName,
+          avatar: '',
+          followersCount: 0,
+          followingCount: 0,
+          isOnline: false,
+          postsCount: 0,
+          registrationDate: serverTimestamp(),
         };
         const usersRef = collection(firestore, 'users');
         const usersDoc = doc(usersRef, uid);
