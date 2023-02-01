@@ -5,7 +5,7 @@ import {
   doc,
   getDocs,
   query,
-  setDoc,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
@@ -13,7 +13,6 @@ import { auth, firestore } from '../firebase/config';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../reducers/store';
 import { setLiked as setLikedFn, setLikesCount as setLikesCountFn } from '../reducers/postsSlice';
-import { Post } from '../types/Post';
 
 // postManager is used for convenient modification state of a post such as likes comment etc.
 export default function usePostManager(postId: string): PostManagement {
@@ -70,26 +69,13 @@ export default function usePostManager(postId: string): PostManagement {
 
   const updateLikesCount = async (changeSizeBy: number) => {
     const postDoc = doc(firestore, 'posts', post.id);
-    await setDoc(postDoc, {
-      ...convertPostToPostData(post),
+    await updateDoc(postDoc, {
       likesCount: post.likesCount + changeSizeBy,
     });
   };
 
   return { sendingData, toggleLike };
 }
-
-const convertPostToPostData = (post: Post) => {
-  return {
-    creator: post.creator,
-    timestamp: post.timestamp,
-    images: post.images,
-    text: post.text,
-    // Stores a few comments to show on previews without fetching all the comments
-    commentsCount: post.commentsCount,
-    likesCount: post.likesCount,
-  };
-};
 
 export type PostManagement = {
   toggleLike: () => void;

@@ -12,12 +12,12 @@ export const queryAdditionalPostData = async (
 ) => {
   const topComments = await queryComments(postRef.id, commentsLimit);
   const liked = await queryLiked(auth.currentUser?.uid!, postRef.id);
-  postRef.data().timestamp;
   return {
     id: postRef.id,
     ...(postRef.data() as PostData),
     topComments: topComments,
     liked: liked,
     newComments: [],
+    timestamp: { ...postRef.data().timestamp },
   } as Post;
 };

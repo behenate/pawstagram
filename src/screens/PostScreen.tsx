@@ -10,8 +10,8 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-na
 import { RootState } from '../reducers/store';
 import usePostManager from '../hooks/usePostManager';
 import { usePaginatedComments } from '../hooks/usePaginatedComments';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { auth, firestore } from '../firebase/config';
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { firestore } from '../firebase/config';
 import { addNewComment, updateNewComment } from '../reducers/postsSlice';
 import { Comment } from '../types/Comment';
 import { CommentData } from '../types/CommentData';
@@ -23,6 +23,7 @@ export default function PostScreen({
   const { sendingData, toggleLike } = usePostManager(postId);
   const post = useSelector((state: RootState) => state.posts[postId]);
   const dispatch = useDispatch();
+  const currentUser = useSelector((state: RootState) => state.currentUser);
 
   const newComments = useSelector((state: RootState) => state.posts[postId].newComments);
   const heightRef = useRef(-1);
@@ -76,7 +77,9 @@ export default function PostScreen({
     const commentsCollection = collection(firestore, 'comments');
     const data: CommentData = {
       respondsTo: post.id,
-      creator: auth.currentUser?.uid!,
+      creator: currentUser.id,
+      creatorFullName: currentUser.fullName,
+      creatorAvatar: currentUser.avatar,
       text: newCommentText,
       images: [],
       timestamp: serverTimestamp(),
@@ -99,6 +102,8 @@ export default function PostScreen({
     dispatch(
       updateNewComment({ id: post.id, commentIdx: newCommentIdx, commentId: newComment.id })
     );
+    const serverPost = doc(collection(firestore, 'posts'), post.id);
+    await updateDoc(serverPost, { commentsCount: post.commentsCount + 1 });
     setIsSendingComment(false);
   };
   return (

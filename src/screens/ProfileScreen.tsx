@@ -1,20 +1,39 @@
 import { User } from '../types/User';
 import CommonContainer from '../containers/CommonContainer';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { Button, MD3Theme, useTheme } from 'react-native-paper';
 import Counter from '../components/Counter';
-import PostFeed from '../components/PostFeed';
+import { queryIsFollowed } from '../queryFunctions/queryIsFollowed';
+import { auth } from '../firebase/config';
+import { queryUnfollow } from '../queryFunctions/queryUnfollow';
+import { queryFollow } from '../queryFunctions/queryFollow';
+
 export default function ProfileScreen({
   route: {
-    params: { fullName, avatar, followers, following, postsCount },
+    params: { id, fullName, avatar, followersCount: initialFollowers, followingCount, postsCount },
   },
 }: ProfileScreenProps) {
+  const [isFollowed, setIsFollowed] = useState(false);
+  const [followersCount, setFollowersCount] = useState(initialFollowers);
+  const currentUserId = auth.currentUser?.uid!;
   const theme = useTheme();
   const styles = useStyles(theme);
+  useEffect(() => {
+    queryIsFollowed(currentUserId, id).then((result) => {
+      setIsFollowed(result);
+    });
+  }, []);
 
+  const toggleFollow = () => {
+    isFollowed
+      ? queryUnfollow(currentUserId, id).catch((e) => console.error(e))
+      : queryFollow(currentUserId, id).catch((e) => console.error(e));
+    setFollowersCount(isFollowed ? followersCount - 1 : followersCount + 1);
+    setIsFollowed(!isFollowed);
+  };
   return (
     <CommonContainer style={styles.container}>
       <View style={styles.infoContainer}>
@@ -22,21 +41,20 @@ export default function ProfileScreen({
         <View style={styles.innerContainer}>
           <Text style={theme.fonts.headlineMedium}>{fullName}</Text>
           <View style={styles.countersContainer}>
-            <Counter label={'followers'} count={followers.toString()} />
-            <Counter label={'following'} count={following.toString()} />
+            <Counter label={'followers'} count={followersCount.toString()} />
+            <Counter label={'following'} count={followingCount.toString()} />
             <Counter label={'posts'} count={postsCount.toString()} />
           </View>
         </View>
       </View>
       <View style={styles.buttonsContainer}>
-        <Button mode={'elevated'} style={styles.button}>
-          Follow
+        <Button mode={'elevated'} style={styles.button} onPress={toggleFollow}>
+          {isFollowed ? 'Unfollow' : 'Follow'}
         </Button>
         <Button mode={'elevated'} style={styles.button}>
           Message
         </Button>
       </View>
-      <PostFeed postIds={[]} emptyFeedText={'This person has not posted anything :('} />
     </CommonContainer>
   );
 }

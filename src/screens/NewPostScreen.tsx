@@ -2,12 +2,16 @@ import { View, Text } from 'react-native';
 import React, { useState } from 'react';
 import { Button, TextInput } from 'react-native-paper';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, firestore } from '../firebase/config';
+import { firestore } from '../firebase/config';
 import { PostData } from '../types/PostData';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../reducers/store';
 
 export default function NewPostScreen() {
   const navigation = useNavigation();
+  const currentUser = useSelector((state: RootState) => state.currentUser);
+
   const [isLoading, setIsLoading] = useState(false);
   const [postText, setPostText] = useState('Test');
   const [imageUrl, setImageUrl] = useState(
@@ -16,10 +20,12 @@ export default function NewPostScreen() {
 
   const addPost = () => {
     setIsLoading(true);
-    const user = auth.currentUser;
+
     const postsRef = collection(firestore, 'posts');
     const data: PostData = {
-      creator: user ? user.uid : '',
+      creator: currentUser.id,
+      creatorAvatar: currentUser.avatar,
+      creatorFullName: currentUser.fullName,
       text: postText,
       images: [imageUrl],
       timestamp: serverTimestamp(),
