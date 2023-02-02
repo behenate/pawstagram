@@ -7,7 +7,10 @@ import emptyUser from '../assets/emptyUser.json';
 // Define a type for the slice state
 
 // Define the initial state using that type
-const initialState: User = emptyUser as User;
+const initialState: CurrentUserSlice = {
+  ...emptyUser,
+  followingList: [],
+} as CurrentUserSlice;
 export const currentUserSlice = createSlice({
   name: 'currentUser',
   initialState: initialState,
@@ -23,10 +26,24 @@ export const currentUserSlice = createSlice({
       state.isOnline = action.payload.isOnline;
       state.registrationDate = action.payload.registrationDate;
     },
+    setFollowing(state, action: PayloadAction<string[]>) {
+      state.followingList = action.payload;
+    },
+    removeFollowing(state, action: PayloadAction<string>) {
+      state.followingList = state.followingList.filter((id) => id != action.payload);
+    },
+    addFollowing(state, action: PayloadAction<string>) {
+      state.followingList.push(action.payload);
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setCurrentUser } = currentUserSlice.actions;
+export const { setCurrentUser, setFollowing, removeFollowing, addFollowing } =
+  currentUserSlice.actions;
 
 export default currentUserSlice.reducer;
+
+type CurrentUserSlice = User & {
+  followingList: string[];
+};

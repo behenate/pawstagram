@@ -12,8 +12,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import FullscreenLoading from '../components/FullscreenLoading';
 import usePaginatedPosts from '../hooks/usePaginatedPosts';
 import queryFollowingList from '../queryFunctions/queryFollowingList';
-import { addPost } from '../reducers/postsSlice';
+import { addPost, removeAll } from '../reducers/postsSlice';
 import { RootState } from '../reducers/store';
+import { setFollowing } from '../reducers/currentUserSlice';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -21,12 +22,20 @@ export default function HomeScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const posts = useSelector((state: RootState) => Object.values(state.posts));
+  const followingList = useSelector((state: RootState) => state.currentUser.followingList);
+
   const {
     loadNextPage,
     canLoadMore,
     setAuthors,
     isLoading: isLoadingNewPosts,
+    reload: reloadPaginatedPosts,
   } = usePaginatedPosts(3);
+
+  useEffect(() => {
+    setAuthors(followingList);
+    reload();
+  }, [followingList]);
 
   const loadMorePosts = async () => {
     if (canLoadMore && !isLoadingNewPosts) {
@@ -36,13 +45,18 @@ export default function HomeScreen() {
       });
     }
   };
+  const loadFollowing = async () => {
+    const follows = await queryFollowingList(userId!);
+    setAuthors(follows);
+    setIsLoading(false);
+    dispatch(setFollowing(follows));
+  };
+  const reload = () => {
+    dispatch(removeAll());
+    reloadPaginatedPosts();
+  };
 
   useEffect(() => {
-    const loadFollowing = async () => {
-      const follows = await queryFollowingList(userId!);
-      setAuthors(follows);
-      setIsLoading(false);
-    };
     loadFollowing().catch((e) => Error(e));
   }, []);
 
@@ -54,6 +68,7 @@ export default function HomeScreen() {
         posts={posts}
         emptyFeedText={'Your feed is empty! Follow your friends to see their posts!'}
         onEndReached={loadMorePosts}
+        onRefresh={reload}
         canLoadMore={canLoadMore}
       />
       <IconButton

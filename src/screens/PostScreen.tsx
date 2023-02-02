@@ -33,7 +33,7 @@ export default function PostScreen({
   const [animationEnabled, setAnimationEnabled] = useState(false);
   const animatedHeight = useSharedValue<number>(-1);
   const [newCommentText, setNewCommentText] = useState('');
-  const [setOnKeyboardShow, setOnKeyboardHide] = useKeyboardStateChangeListener();
+  const { setOnKeyboardShow, setOnKeyboardHide } = useKeyboardStateChangeListener();
 
   const {
     comments: paginatedComments,

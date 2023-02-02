@@ -7,5 +7,6 @@
   "followingCount": 123,
   "postsCount": 123,
   "isOnline": false,
-  "registrationDate": { "nanoseconds": 123, "seconds": 123 }
+  "registrationDate": { "nanoseconds": 123, "seconds": 123 },
+  "description": "Hello im a test user"
 }

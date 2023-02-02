@@ -25,6 +25,9 @@ export const postsSlice = createSlice({
     addPost: (state, action: PayloadAction<Post>) => {
       state[action.payload.id] = action.payload;
     },
+    removeAll: (state) => {
+      Object.keys(state).forEach((key) => delete state[key]);
+    },
     // Adds new comment for the optimistic update
     addNewComment: (state, action: PayloadAction<{ id: string; comment: Comment }>) => {
       state[action.payload.id].newComments.push(action.payload.comment);
@@ -40,7 +43,7 @@ export const postsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setLikesCount, setLiked, addPost, addNewComment, updateNewComment } =
+export const { setLikesCount, setLiked, addPost, addNewComment, updateNewComment, removeAll } =
   postsSlice.actions;
 
 export default postsSlice.reducer;

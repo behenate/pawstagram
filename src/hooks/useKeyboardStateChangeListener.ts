@@ -6,7 +6,8 @@ import { Keyboard } from 'react-native';
 export default function useKeyboardStateChangeListener() {
   const [onKeyboardShow, setOnKeyboardShow] = useState<() => void>(() => () => undefined);
   const [onKeyboardHide, setOnKeyboardHide] = useState<() => void>(() => () => undefined);
-
+  const [onKeyboardWillShow, setOnKeyboardWillShow] = useState<() => void>(() => () => undefined);
+  const [onKeyboardWillHide, setOnKeyboardWillHide] = useState<() => void>(() => () => undefined);
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       onKeyboardShow();
@@ -14,11 +15,20 @@ export default function useKeyboardStateChangeListener() {
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
       onKeyboardHide();
     });
+    // Doesnt work on android
+    const keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () => {
+      onKeyboardWillHide();
+    });
+    const keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => {
+      onKeyboardWillHide();
+    });
 
     return () => {
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
+      keyboardWillHideListener.remove();
+      keyboardWillShowListener.remove();
     };
-  }, [onKeyboardShow, onKeyboardHide]);
-  return [setOnKeyboardShow, setOnKeyboardHide];
+  }, [onKeyboardShow, onKeyboardHide, onKeyboardWillHide, onKeyboardWillShow]);
+  return { setOnKeyboardShow, setOnKeyboardHide, setOnKeyboardWillShow, setOnKeyboardWillHide };
 }

@@ -8,6 +8,7 @@ import {
   QueryDocumentSnapshot,
   startAfter,
   where,
+  Query,
 } from 'firebase/firestore';
 import { firestore } from '../firebase/config';
 import { Post } from '../types/Post';
@@ -23,30 +24,27 @@ export default function usePaginatedPosts(pageSize: number = 20, authorsPassed?:
   const [isLoading, setIsLoading] = useState(false);
   const postsCollection = collection(firestore, 'posts');
   const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot | undefined>(undefined);
-  const decoyQuery = query(postsCollection, where('creator', '==', '123'));
   const first =
-    authors.length > 0
-      ? query(
-          postsCollection,
-          where('creator', 'in', authors),
-          orderBy('timestamp', 'desc'),
-          limit(pageSize)
-        )
-      : decoyQuery;
+    authors.length > 0 &&
+    query(
+      postsCollection,
+      where('creator', 'in', authors),
+      orderBy('timestamp', 'desc'),
+      limit(pageSize)
+    );
+
   const nextCreator = (startingPost: QueryDocumentSnapshot | undefined) =>
-    authors.length > 0
-      ? query(
-          postsCollection,
-          where('creator', 'in', authors),
-          orderBy('timestamp', 'desc'),
-          startAfter(startingPost),
-          limit(pageSize)
-        )
-      : decoyQuery;
+    authors.length > 0 &&
+    query(
+      postsCollection,
+      where('creator', 'in', authors),
+      orderBy('timestamp', 'desc'),
+      startAfter(startingPost),
+      limit(pageSize)
+    );
 
   useEffect(() => {
-    setPosts([]);
-    setLastVisible(undefined);
+    reload();
   }, [authors]);
 
   const loadNextPage: () => Promise<Post[]> = () =>
@@ -54,12 +52,14 @@ export default function usePaginatedPosts(pageSize: number = 20, authorsPassed?:
       setIsLoading(true);
       const next = posts.length > 0 && nextCreator(lastVisible);
       const newPosts: Post[] = [];
-      const results = await getDocs(next ? next : first);
+      const results = await getDocs((next ? next : first) as Query);
+
       if (results.size == 0) {
         setCanLoadMore(false);
         setIsLoading(false);
         resolve([]);
       }
+
       results.forEach((result) => {
         queryAdditionalPostData(result as QueryDocumentSnapshot<PostData>).then((post) => {
           newPosts.push(post);
@@ -72,6 +72,10 @@ export default function usePaginatedPosts(pageSize: number = 20, authorsPassed?:
         });
       });
     });
-
-  return { posts, loadNextPage, canLoadMore, setAuthors, isLoading };
+  const reload = () => {
+    setPosts([]);
+    setLastVisible(undefined);
+    setCanLoadMore(true);
+  };
+  return { posts, loadNextPage, canLoadMore, setAuthors, isLoading, reload };
 }

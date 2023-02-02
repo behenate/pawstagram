@@ -10,6 +10,8 @@ import { queryIsFollowed } from '../queryFunctions/queryIsFollowed';
 import { auth } from '../firebase/config';
 import { queryUnfollow } from '../queryFunctions/queryUnfollow';
 import { queryFollow } from '../queryFunctions/queryFollow';
+import { useDispatch } from 'react-redux';
+import { addFollowing, removeFollowing } from '../reducers/currentUserSlice';
 
 export default function ProfileScreen({
   route: {
@@ -21,6 +23,8 @@ export default function ProfileScreen({
   const currentUserId = auth.currentUser?.uid!;
   const theme = useTheme();
   const styles = useStyles(theme);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     queryIsFollowed(currentUserId, id).then((result) => {
       setIsFollowed(result);
@@ -32,6 +36,7 @@ export default function ProfileScreen({
       ? queryUnfollow(currentUserId, id).catch((e) => console.error(e))
       : queryFollow(currentUserId, id).catch((e) => console.error(e));
     setFollowersCount(isFollowed ? followersCount - 1 : followersCount + 1);
+    isFollowed ? dispatch(removeFollowing(id)) : dispatch(addFollowing(id));
     setIsFollowed(!isFollowed);
   };
   return (

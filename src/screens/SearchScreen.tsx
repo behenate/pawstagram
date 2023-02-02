@@ -32,7 +32,7 @@ function SearchScreenContent() {
   const [searchText, setSearchText] = useState('');
   const animatedHeight = useSharedValue<number>(100);
 
-  const [setOnKeyboardShow, setOnKeyboardHide] = useKeyboardStateChangeListener();
+  const { setOnKeyboardShow, setOnKeyboardHide } = useKeyboardStateChangeListener();
 
   const onSearchChange = (change: string) => {
     setSearchText(change);
