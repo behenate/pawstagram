@@ -13,7 +13,6 @@ import queryUser from '../queryFunctions/queryUser';
 export default function PostHeader({ post }: PostHeaderProps) {
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
   const loadProfile = async () => {
     const user = await queryUser(post.creator);
     navigation.navigate('Profile', user);
