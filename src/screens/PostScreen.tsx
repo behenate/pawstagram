@@ -2,7 +2,7 @@ import Post from '../components/Post';
 import CommentsList from '../components/CommentsList';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,7 @@ import { firestore } from '../firebase/config';
 import { addNewComment, updateNewComment } from '../reducers/postsSlice';
 import { Comment } from '../types/Comment';
 import { CommentData } from '../types/CommentData';
+import useKeyboardStateChangeListener from '../hooks/useKeyboardStateChangeListener';
 export default function PostScreen({
   route: {
     params: { postId, focusTextInput = false },
@@ -32,6 +33,8 @@ export default function PostScreen({
   const [animationEnabled, setAnimationEnabled] = useState(false);
   const animatedHeight = useSharedValue<number>(-1);
   const [newCommentText, setNewCommentText] = useState('');
+  const [setOnKeyboardShow, setOnKeyboardHide] = useKeyboardStateChangeListener();
+
   const {
     comments: paginatedComments,
     loadNextPage,
@@ -53,11 +56,11 @@ export default function PostScreen({
   });
 
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+    setOnKeyboardShow(() => () => {
       setAnimationEnabled(true);
       animatedHeight.value = 0;
     });
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+    setOnKeyboardHide(() => () => {
       animatedHeight.value = heightRef.current;
     });
 
@@ -65,11 +68,6 @@ export default function PostScreen({
       //@ts-ignore
       setTimeout(() => refInput.current && refInput.current?.focus(), 100);
     }
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-    };
   }, []);
 
   const sendComment = async () => {

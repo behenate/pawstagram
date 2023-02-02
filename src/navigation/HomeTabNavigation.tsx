@@ -1,7 +1,7 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import HomeScreen, { HomeScreenParams } from '../screens/HomeScreen';
 import ChatScreen from '../screens/ChatScreen';
-import FavouritesScreen from '../screens/FavouritesScreen';
+import SearchScreen from '../screens/SearchScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { RouteProp, useNavigation } from '@react-navigation/native';
@@ -71,10 +71,12 @@ export default function HomeTabNavigation(props: HomeTabNavigationProps) {
         )}
       </Tab.Screen>
       <Tab.Screen
-        name="Favourites"
-        component={FavouritesScreen}
+        name="Search"
+        component={SearchScreen}
         options={{
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="star" color={color} size={26} />,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account-search" color={color} size={26} />
+          ),
         }}
       />
     </Tab.Navigator>
@@ -85,5 +87,5 @@ export type HomeTabNavigationProps = NativeStackScreenProps<RootStackParamList, 
 export type RootStackParamListTabs = {
   Home: HomeScreenParams;
   Chat: undefined;
-  Favourites: undefined;
+  Search: undefined;
 };
