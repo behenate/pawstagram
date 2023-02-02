@@ -41,6 +41,7 @@ export default function RegisterScreen() {
           isOnline: false,
           postsCount: 0,
           registrationDate: serverTimestamp(),
+          description: '',
         };
         const usersRef = collection(firestore, 'users');
         const usersDoc = doc(usersRef, uid);

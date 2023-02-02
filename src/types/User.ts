@@ -10,4 +10,5 @@ export type User = {
   postsCount: number;
   isOnline: boolean;
   registrationDate: { nanoseconds: number; seconds: number } | FieldValue;
+  description: string;
 };

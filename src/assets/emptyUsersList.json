@@ -1,0 +1,81 @@
+[
+  {
+    "id": "1234",
+    "email": "1234",
+    "fullName": "1234",
+    "avatar": "https://ih1.redbubble.net/image.208534030.1478/flat,800x800,075,f.u2.jpg",
+    "followersCount": 123,
+    "followingCount": 123,
+    "postsCount": 123,
+    "isOnline": false,
+    "registrationDate": {
+      "nanoseconds": 123,
+      "seconds": 123
+    },
+    "description": "I like food"
+  },
+  {
+    "id": "1234",
+    "email": "1234",
+    "fullName": "1234",
+    "avatar": "https://ih1.redbubble.net/image.208534030.1478/flat,800x800,075,f.u2.jpg",
+    "followersCount": 123,
+    "followingCount": 123,
+    "postsCount": 123,
+    "isOnline": false,
+    "registrationDate": {
+      "nanoseconds": 123,
+      "seconds": 123
+    },
+    "description": "I like food"
+
+  },
+  {
+    "id": "1234",
+    "email": "1234",
+    "fullName": "1234",
+    "avatar": "https://ih1.redbubble.net/image.208534030.1478/flat,800x800,075,f.u2.jpg",
+    "followersCount": 123,
+    "followingCount": 123,
+    "postsCount": 123,
+    "isOnline": false,
+    "registrationDate": {
+      "nanoseconds": 123,
+      "seconds": 123
+    },
+    "description": "I like food"
+
+  },
+  {
+    "id": "1234",
+    "email": "1234",
+    "fullName": "1234",
+    "avatar": "https://ih1.redbubble.net/image.208534030.1478/flat,800x800,075,f.u2.jpg",
+    "followersCount": 123,
+    "followingCount": 123,
+    "postsCount": 123,
+    "isOnline": false,
+    "registrationDate": {
+      "nanoseconds": 123,
+      "seconds": 123
+    },
+    "description": "I like food"
+
+  },
+  {
+    "id": "1234",
+    "email": "1234",
+    "fullName": "HALO",
+    "avatar": "https://ih1.redbubble.net/image.208534030.1478/flat,800x800,075,f.u2.jpg",
+    "followersCount": 123,
+    "followingCount": 123,
+    "postsCount": 123,
+    "isOnline": false,
+    "registrationDate": {
+      "nanoseconds": 123,
+      "seconds": 123
+    },
+    "description": "I like food"
+
+  }
+]
